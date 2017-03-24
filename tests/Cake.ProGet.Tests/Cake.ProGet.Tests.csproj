@@ -77,9 +77,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Universal\Install\InstallSettingsTests.cs" />
+    <Compile Include="Universal\Push\PushSettingsTests.cs" />
+    <Compile Include="Universal\UPackToolResolverTests.cs" />
+    <Compile Include="Universal\Fixtures\UPackToolResolverFixture.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Cake.ProGet\Cake.ProGet.csproj">
+      <Project>{AE07CAC3-74F1-4A86-9A77-DE297718145A}</Project>
+      <Name>Cake.ProGet</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
