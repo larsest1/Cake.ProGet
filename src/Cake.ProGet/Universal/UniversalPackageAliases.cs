@@ -33,11 +33,6 @@ namespace Cake.ProGet.Universal
                 throw new ArgumentNullException(nameof(context));
             }
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-
             var resolver = new UPackToolResolver(context.FileSystem, context.Environment, context.Tools);
             var runner = new UniversalPackagePacker(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
 
@@ -57,11 +52,6 @@ namespace Cake.ProGet.Universal
             if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
-            }
-
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
             }
 
             var resolver = new UPackToolResolver(context.FileSystem, context.Environment, context.Tools);
@@ -85,11 +75,6 @@ namespace Cake.ProGet.Universal
                 throw new ArgumentNullException(nameof(context));
             }
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-
             var resolver = new UPackToolResolver(context.FileSystem, context.Environment, context.Tools);
             var runner = new UniversalPackageUnpacker(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
 
@@ -109,11 +94,6 @@ namespace Cake.ProGet.Universal
             if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
-            }
-
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
             }
 
             var resolver = new UPackToolResolver(context.FileSystem, context.Environment, context.Tools);

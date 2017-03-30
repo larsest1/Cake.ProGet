@@ -5,9 +5,9 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{086991A6-8E2C-435A-813F-587224757293}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.ProGet", "src\Cake.ProGet\Cake.ProGet.csproj", "{AE07CAC3-74F1-4A86-9A77-DE297718145A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.ProGet", "Cake.ProGet\Cake.ProGet.csproj", "{AE07CAC3-74F1-4A86-9A77-DE297718145A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.ProGet.Tests", "tests\Cake.ProGet.Tests\Cake.ProGet.Tests.csproj", "{CD615CD6-6750-4DBC-B6B7-80FF5DC497B0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.ProGet.Tests", "Cake.ProGet.Tests\Cake.ProGet.Tests.csproj", "{CD615CD6-6750-4DBC-B6B7-80FF5DC497B0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -90,3 +90,4 @@ packages
 # Windows
 Thumbs.db
 *.orig
+BuildArtifacts/

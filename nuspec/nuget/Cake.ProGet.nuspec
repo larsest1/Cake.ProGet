@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <id>Cake.ProGet</id>
+    <version>0.0.0</version>
+    <authors>Kyle Camp</authors>
+    <owners>Kyle Camp, cake-contrib</owners>
+    <description>Cake ProGet Addin.</description>
+    <summary>A set of aliases for Cake to help with running ProGet scripts as part of a build.</summary>
+    <licenseUrl>https://github.com/cake-contrib/Cake.ProGet/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/cake-contrib/Cake.ProGet/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <copyright>Copyright (c) Cake Contributions 2017 - Present</copyright>
+    <tags>Cake, Script, Build, ProGet, Addin, upack</tags>
+  </metadata>
+  <files>
+    <file src="Cake.ProGet.dll" target="lib\net45" />
+    <file src="Cake.ProGet.pdb" target="lib\net45" />
+    <file src="Cake.ProGet.xml" target="lib\net45" />
+  </files>
+</package>
