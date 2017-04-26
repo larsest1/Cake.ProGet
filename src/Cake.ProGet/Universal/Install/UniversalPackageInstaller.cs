@@ -34,7 +34,22 @@ namespace Cake.ProGet.Universal.Install
             {
                 throw new ArgumentNullException(nameof(settings));
             }
-            
+
+            if (string.IsNullOrEmpty(settings.Package))
+            {
+                throw new CakeException("Required setting Package not specified.");
+            }
+
+            if (string.IsNullOrEmpty(settings.Source))
+            {
+                throw new CakeException("Required setting Source not specified.");
+            }
+
+            if (settings.TargetDirectory == null)
+            {
+                throw new CakeException("Required setting TargetDirectory not specified.");
+            }
+
             var builder = new ProcessArgumentBuilder();
 
             builder.Append("install");
@@ -47,7 +62,7 @@ namespace Cake.ProGet.Universal.Install
             }
 
             builder.Append("--source={0}", settings.Source);
-            builder.Append("--target=\"{0}\"", settings.TargetDirectory.FullPath);
+            builder.Append("--target=\"{0}\"",  settings.TargetDirectory.MakeAbsolute(this.Environment));
 
             if (settings.Overwrite)
             {
@@ -58,7 +73,7 @@ namespace Cake.ProGet.Universal.Install
             {
                 if (!settings.AreCredentialsValid())
                 {
-                    throw new ArgumentException("Both username and password must be specified for authentication");
+                    throw new CakeException("Both username and password must be specified for authentication");
                 }
 
                 builder.Append("--user={0}", $"{settings.UserName}:{settings.Password}");

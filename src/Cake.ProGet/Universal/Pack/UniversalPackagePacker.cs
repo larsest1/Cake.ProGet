@@ -35,22 +35,32 @@ namespace Cake.ProGet.Universal.Pack
                 throw new ArgumentNullException(nameof(settings));
             }
 
+            if (settings.MetadataFilePath == null)
+            {
+                throw new CakeException("Required setting MetadataFilePath not specified.");
+            }
+
+            if (settings.SourceDirectory == null)
+            {
+                throw new CakeException("Required setting SourceDirectory not specified.");
+            }
+
             if (!this.FileSystem.GetFile(settings.MetadataFilePath).Exists)
             {
-                throw new ArgumentException($"Metadata file does not exist at '{settings.MetadataFilePath.FullPath}'");
+                throw new CakeException($"Metadata file does not exist at '{settings.MetadataFilePath.FullPath}'");
             }
 
             if (!this.FileSystem.GetDirectory(settings.SourceDirectory).Exists)
             {
-                throw new ArgumentException($"Source directory does not exist at '{settings.SourceDirectory.FullPath}'");
+                throw new CakeException($"Source directory does not exist at '{settings.SourceDirectory.FullPath}'");
             }
 
             var builder = new ProcessArgumentBuilder();
 
             builder.Append("pack");
 
-            builder.AppendQuoted(settings.MetadataFilePath.FullPath);
-            builder.AppendQuoted(settings.SourceDirectory.FullPath);
+            builder.AppendQuoted(settings.MetadataFilePath.MakeAbsolute(Environment).FullPath);
+            builder.AppendQuoted(settings.SourceDirectory.MakeAbsolute(Environment).FullPath);
 
             // make sure the target directory exists.
             if (settings.TargetDirectory != null)
@@ -61,7 +71,7 @@ namespace Cake.ProGet.Universal.Pack
                     dir.Create();
                 }
 
-                builder.Append("--targetDirectory=\"{0}\"", settings.TargetDirectory.FullPath);
+                builder.Append("--targetDirectory=\"{0}\"", settings.TargetDirectory.MakeAbsolute(Environment).FullPath);
             }
 
             Run(settings, builder);

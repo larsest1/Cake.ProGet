@@ -1,7 +1,9 @@
 ﻿using System;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
-
+// ReSharper disable UnusedMember.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
 namespace Cake.ProGet.Universal.Push
 {
     /// <summary>
@@ -10,6 +12,13 @@ namespace Cake.ProGet.Universal.Push
     /// <seealso cref="Cake.Core.Tooling.ToolSettings" />
     public sealed class UniversalPackagePushSettings : ToolSettings
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UniversalPackagePushSettings"/> class.
+        /// </summary>
+        public UniversalPackagePushSettings()
+        {
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UniversalPackagePushSettings"/> class.
         /// </summary>
@@ -34,14 +43,14 @@ namespace Cake.ProGet.Universal.Push
         }
 
         /// <summary>
-        /// Gets the <see cref="FilePath"/> of the package to push
+        /// Gets or sets the <see cref="FilePath"/> of the package to push
         /// </summary>
-        public FilePath Package { get;  }
+        public FilePath Package { get; set; }
 
         /// <summary>
-        /// Gets the URL of a upack API endpoint.
+        /// Gets or sets the URL of a upack API endpoint.
         /// </summary>
-        public string Target { get; }
+        public string Target { get; set; }
 
         /// <summary>
         /// Gets or sets the username for an authenticated endpoint

@@ -1,7 +1,9 @@
 ﻿using System;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
-
+// ReSharper disable UnusedMember.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
 namespace Cake.ProGet.Universal.Pack
 {
     /// <summary>
@@ -10,6 +12,13 @@ namespace Cake.ProGet.Universal.Pack
     /// <seealso cref="Cake.Core.Tooling.ToolSettings" />
     public sealed class UniversalPackagePackSettings : ToolSettings
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UniversalPackagePackSettings"/> class.
+        /// </summary>
+        public UniversalPackagePackSettings()
+        {
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UniversalPackagePackSettings"/> class.
         /// </summary>
@@ -36,18 +45,19 @@ namespace Cake.ProGet.Universal.Pack
         }
 
         /// <summary>
-        /// Gets the upack.json metadata file path.
+        /// Gets or sets the upack.json metadata file path.
         /// </summary>
-        public FilePath MetadataFilePath { get; }
+        public FilePath MetadataFilePath { get; set; }
 
         /// <summary>
-        /// Gets the directory containing files to add to the package.
+        /// Gets or sets the directory containing files to add to the package.
         /// </summary>
-        public DirectoryPath SourceDirectory { get; }
+        public DirectoryPath SourceDirectory { get; set; }
 
         /// <summary>
         /// Gets or sets the directory where the .upack file will be created. If not specified, the current working directory is used.
         /// </summary>
+        // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public DirectoryPath TargetDirectory { get; set; }
     }
 }

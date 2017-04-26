@@ -17,7 +17,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;XUNIT_VISIBILITY_INTERNAL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -25,17 +25,17 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;XUNIT_VISIBILITY_INTERNAL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Cake.Core, Version=0.19.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Cake.Core.0.19.1\lib\net45\Cake.Core.dll</HintPath>
+    <Reference Include="Cake.Core, Version=0.19.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Cake.Core.0.19.4\lib\net45\Cake.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Cake.Testing, Version=0.19.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Cake.Testing.0.19.1\lib\net45\Cake.Testing.dll</HintPath>
+    <Reference Include="Cake.Testing, Version=0.19.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Cake.Testing.0.19.4\lib\net45\Cake.Testing.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FluentAssertions, Version=4.19.2.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
@@ -46,8 +46,8 @@
       <HintPath>..\..\packages\FluentAssertions.4.19.2\lib\net45\FluentAssertions.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NSubstitute, Version=2.0.2.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\NSubstitute.2.0.2\lib\net45\NSubstitute.dll</HintPath>
+    <Reference Include="NSubstitute, Version=2.0.3.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
+      <HintPath>..\packages\NSubstitute.2.0.3\lib\net45\NSubstitute.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -62,10 +62,6 @@
       <HintPath>..\..\packages\xunit.abstractions.2.0.1\lib\net35\xunit.abstractions.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="xunit.assert, Version=2.2.0.3545, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\xunit.assert.2.2.0\lib\netstandard1.1\xunit.assert.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="xunit.core, Version=2.2.0.3545, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <HintPath>..\..\packages\xunit.extensibility.core.2.2.0\lib\netstandard1.1\xunit.core.dll</HintPath>
       <Private>True</Private>
@@ -76,9 +72,77 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Asserts\Assert.cs" />
+    <Compile Include="Asserts\BooleanAsserts.cs" />
+    <Compile Include="Asserts\CollectionAsserts.cs" />
+    <Compile Include="Asserts\Comparers.cs" />
+    <Compile Include="Asserts\EqualityAsserts.cs" />
+    <Compile Include="Asserts\EventAsserts.cs" />
+    <Compile Include="Asserts\ExceptionAsserts.cs" />
+    <Compile Include="Asserts\Guards.cs" />
+    <Compile Include="Asserts\IdentityAsserts.cs" />
+    <Compile Include="Asserts\NullAsserts.cs" />
+    <Compile Include="Asserts\PropertyAsserts.cs" />
+    <Compile Include="Asserts\RangeAsserts.cs" />
+    <Compile Include="Asserts\Record.cs" />
+    <Compile Include="Asserts\Sdk\ArgumentFormatter.cs" />
+    <Compile Include="Asserts\Sdk\AssertComparer.cs" />
+    <Compile Include="Asserts\Sdk\AssertEqualityComparer.cs" />
+    <Compile Include="Asserts\Sdk\AssertEqualityComparerAdapter.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\AllException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\AssertActualExpectedException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\AssertCollectionCountException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\CollectionException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\ContainsException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\DoesNotContainException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\DoesNotMatchException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\EmptyException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\EndsWithException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\EqualException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\FalseException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\InRangeException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\IsAssignableFromException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\IsNotTypeException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\IsTypeException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\MatchesException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\NotEmptyException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\NotEqualException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\NotInRangeException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\NotNullException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\NotSameException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\NullException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\ParameterCountMismatchException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\ProperSubsetException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\ProperSupersetException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\PropertyChangedException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\RaisesException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\SameException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\SingleException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\StartsWithException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\SubsetException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\SupersetException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\ThrowsException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\TrueException.cs" />
+    <Compile Include="Asserts\Sdk\Exceptions\XunitException.cs" />
+    <Compile Include="Asserts\SetAsserts.cs" />
+    <Compile Include="Asserts\StringAsserts.cs" />
+    <Compile Include="Asserts\TypeAsserts.cs" />
+    <Compile Include="ExceptionAsserts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Universal\Install\InstallSettingsTests.cs" />
-    <Compile Include="Universal\Push\PushSettingsTests.cs" />
+    <Compile Include="Universal\Fixtures\UniversalPackageInstallerFixture.cs" />
+    <Compile Include="Universal\Fixtures\UniversalPackagePackerFixture.cs" />
+    <Compile Include="Universal\Fixtures\UniversalPackagePusherFixture.cs" />
+    <Compile Include="Universal\Fixtures\UniversalPackageUnpackerFixture.cs" />
+    <Compile Include="Universal\Fixtures\UPackFixture.cs" />
+    <Compile Include="Universal\Install\UniversalPackageInstallerTests.cs" />
+    <Compile Include="Universal\Install\UniversalPackageInstallSettingsTests.cs" />
+    <Compile Include="Universal\Pack\UniversalPackagePackerTests.cs" />
+    <Compile Include="Universal\Pack\UniversalPackagePackSettingsTests.cs" />
+    <Compile Include="Universal\Push\UniversalPackagePusherTests.cs" />
+    <Compile Include="Universal\Push\UniversalPackagePushSettingsTests.cs" />
+    <Compile Include="Universal\UniversalPackageAliasesTests.cs" />
+    <Compile Include="Universal\Unpack\UniversalPackageUnpackerTests.cs" />
+    <Compile Include="Universal\Unpack\UniversalPackageUnpackSettingsTests.cs" />
     <Compile Include="Universal\UPackToolResolverTests.cs" />
     <Compile Include="Universal\Fixtures\UPackToolResolverFixture.cs" />
   </ItemGroup>
@@ -91,6 +155,7 @@
       <Name>Cake.ProGet</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

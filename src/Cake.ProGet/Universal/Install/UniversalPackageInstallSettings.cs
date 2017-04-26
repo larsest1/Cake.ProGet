@@ -1,7 +1,9 @@
 ﻿using System;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
-
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable UnusedMember.Global
 namespace Cake.ProGet.Universal.Install
 {
     /// <summary>
@@ -10,6 +12,13 @@ namespace Cake.ProGet.Universal.Install
     /// <seealso cref="Cake.Core.Tooling.ToolSettings" />
     public sealed class UniversalPackageInstallSettings : ToolSettings
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UniversalPackageInstallSettings"/> class.
+        /// </summary>
+        public UniversalPackageInstallSettings()
+        {
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UniversalPackageInstallSettings"/> class.
         /// </summary>
@@ -43,9 +52,9 @@ namespace Cake.ProGet.Universal.Install
         }
 
         /// <summary>
-        /// Gets the package to install
+        /// Gets or sets the package to install
         /// </summary>
-        public string Package { get; }
+        public string Package { get; set; }
 
         /// <summary>
         /// Gets or sets the version to install.  If version is not specified, the latest will be retrieved.
@@ -53,14 +62,14 @@ namespace Cake.ProGet.Universal.Install
         public string Version { get; set; }
 
         /// <summary>
-        /// Gets the URL of a upack API endpoint to install from.
+        /// Gets or sets the URL of a upack API endpoint to install from.
         /// </summary>
-        public string Source { get; }
+        public string Source { get; set; }
 
         /// <summary>
-        /// Gets the target directory to install the package
+        /// Gets or sets the target directory to install the package
         /// </summary>
-        public DirectoryPath TargetDirectory { get; }
+        public DirectoryPath TargetDirectory { get; set; }
 
         /// <summary>
         /// Gets or sets the username for an authenticated endpoint

@@ -1,7 +1,9 @@
 ﻿using System;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
-
+// ReSharper disable UnusedMember.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
 namespace Cake.ProGet.Universal.Unpack
 {
     /// <summary>
@@ -10,6 +12,13 @@ namespace Cake.ProGet.Universal.Unpack
     /// <seealso cref="Cake.Core.Tooling.ToolSettings" />
     public sealed class UniversalPackageUnpackSettings : ToolSettings
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UniversalPackageUnpackSettings"/> class.
+        /// </summary>
+        public UniversalPackageUnpackSettings()
+        {
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UniversalPackageUnpackSettings"/> class.
         /// </summary>
@@ -38,14 +47,14 @@ namespace Cake.ProGet.Universal.Unpack
         }
 
         /// <summary>
-        /// Gets the upack file to unpack
+        /// Gets or sets the upack file to unpack
         /// </summary>
-        public FilePath Package { get; }
+        public FilePath Package { get; set; }
 
         /// <summary>
-        /// Gets the target directory to unpack the package
+        /// Gets or sets the target directory to unpack the package
         /// </summary>
-        public DirectoryPath TargetDirectory { get; }
+        public DirectoryPath TargetDirectory { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the package should be overwritten if it already exists.
@@ -53,6 +62,7 @@ namespace Cake.ProGet.Universal.Unpack
         /// <value>
         ///   <c>true</c> if package should be overwritten; otherwise, <c>false</c>.
         /// </value>
+        // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public bool Overwrite { get; set; }
     }
 }

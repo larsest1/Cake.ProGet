@@ -35,17 +35,27 @@ namespace Cake.ProGet.Universal.Unpack
                 throw new ArgumentNullException(nameof(settings));
             }
 
+            if (settings.Package == null)
+            {
+                throw new CakeException("Required setting Package not specified.");
+            }
+
+            if (settings.TargetDirectory == null)
+            {
+                throw new CakeException("Required setting TargetDirectory not specified.");
+            }
+
             if (!this.FileSystem.GetFile(settings.Package).Exists)
             {
-                throw new ArgumentException($"Universal package file does not exist at '{settings.Package.FullPath}'");
+                throw new CakeException($"Universal package file does not exist at '{settings.Package.FullPath}'");
             }
 
             var builder = new ProcessArgumentBuilder();
 
             builder.Append("unpack");
 
-            builder.AppendQuoted(settings.Package.FullPath);
-            builder.AppendQuoted(settings.TargetDirectory.FullPath);
+            builder.AppendQuoted(settings.Package.MakeAbsolute(Environment).FullPath);
+            builder.AppendQuoted(settings.TargetDirectory.MakeAbsolute(Environment).FullPath);
             
             if (settings.Overwrite)
             {

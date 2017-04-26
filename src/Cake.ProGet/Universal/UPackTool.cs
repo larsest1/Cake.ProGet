@@ -39,7 +39,16 @@ namespace Cake.ProGet.Universal
             _resolver = resolver;
 
             this.FileSystem = fileSystem;
+            this.Environment = environment;
         }
+
+        /// <summary>
+        /// Gets the environment.
+        /// </summary>
+        /// <value>
+        /// The environment.
+        /// </value>
+        protected ICakeEnvironment Environment { get; }
 
         /// <summary>
         /// Gets the file system.

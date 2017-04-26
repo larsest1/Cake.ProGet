@@ -35,23 +35,33 @@ namespace Cake.ProGet.Universal.Push
                 throw new ArgumentNullException(nameof(settings));
             }
 
+            if (settings.Package == null)
+            {
+                throw new CakeException("Required setting Package not specified.");
+            }
+
+            if (string.IsNullOrEmpty(settings.Target))
+            {
+                throw new CakeException("Required setting Target not specified.");
+            }
+
             if (!this.FileSystem.GetFile(settings.Package).Exists)
             {
-                throw new ArgumentException($"Universal package file does not exist at '{settings.Package.FullPath}'");
+                throw new CakeException($"Universal package file does not exist at '{settings.Package.FullPath}'");
             }
 
             var builder = new ProcessArgumentBuilder();
 
             builder.Append("push");
 
-            builder.AppendQuoted(settings.Package.FullPath);
+            builder.AppendQuoted(settings.Package.MakeAbsolute(Environment).FullPath);
             builder.AppendQuoted(settings.Target);
 
             if (settings.HasCredentials())
             {
                 if (!settings.AreCredentialsValid())
                 {
-                    throw new ArgumentException("Both username and password must be specified for authentication");
+                    throw new CakeException("Both username and password must be specified for authentication");
                 }
                 
                 builder.Append("--user={0}", $"{settings.UserName}:{settings.Password}");
