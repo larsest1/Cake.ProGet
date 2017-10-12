@@ -14,8 +14,8 @@
     <tags>Cake, Script, Build, ProGet, Addin, upack</tags>
   </metadata>
   <files>
-    <file src="Cake.ProGet.dll" target="lib\net45" />
-    <file src="Cake.ProGet.pdb" target="lib\net45" />
-    <file src="Cake.ProGet.xml" target="lib\net45" />
+    <file src="Cake.ProGet.dll" target="lib\net461" />
+    <file src="Cake.ProGet.pdb" target="lib\net461" />
+    <file src="Cake.ProGet.xml" target="lib\net461" />
   </files>
 </package>
