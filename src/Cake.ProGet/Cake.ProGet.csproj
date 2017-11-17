@@ -41,6 +41,9 @@
     <Reference Include="Cake.Core, Version=0.23.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Cake.Core.0.23.0\lib\net46\Cake.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -51,6 +54,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Asset\ProGetAssetDirectoryLister.cs" />
+    <Compile Include="Asset\ProGetAssetDownloader.cs" />
+    <Compile Include="Asset\ProGetAssetPusher.cs" />
+    <Compile Include="Asset\ProGetAssetAliases.cs" />
+    <Compile Include="Asset\ProGetAssetUtils.cs" />
+    <Compile Include="Asset\ProGetConfiguration.cs" />
+    <Compile Include="Asset\ProGetDirectoryListing.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Universal\Install\UniversalPackageInstallSettings.cs" />
     <Compile Include="Universal\Install\UniversalPackageInstaller.cs" />
