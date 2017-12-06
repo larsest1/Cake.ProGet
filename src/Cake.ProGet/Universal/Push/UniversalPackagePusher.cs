@@ -64,7 +64,9 @@ namespace Cake.ProGet.Universal.Push
                     throw new CakeException("Both username and password must be specified for authentication");
                 }
                 
-                builder.Append("--user={0}", $"{settings.UserName}:{settings.Password}");
+                // this is a bit hacky.  ProGet Universal Package endpoints expect a particular format
+                // in which we want to protect the secret, so we stitch together the switch syntax
+                builder.AppendSwitchSecret($"--user={settings.UserName}", ":", settings.Password);
             }
 
             Run(settings, builder);
