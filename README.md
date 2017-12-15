@@ -5,6 +5,9 @@
  * Provides aliases for the functionality found in `upack.exe` ([available here](http://cdn.inedo.com/downloads/proget/upack1.0.0.zip)) .
  * Provides aliases for the [Asset Directory](https://inedo.com/support/documentation/proget/core-concepts/asset-directories) functionality.
 
+[![Build status](https://ci.appveyor.com/api/projects/status/2xkeb02h6rvkwk0b?svg=true)](https://ci.appveyor.com/project/austinlparker/cake-proget)
+
+
  ## Table of Contents
 
 1. [Building](https://github.com/apprenda/cake.proget#building)
