@@ -127,6 +127,30 @@ namespace Xunit.Sdk
             if (structuralEquatable != null && structuralEquatable.Equals(y, new TypeErasedEqualityComparer(innerComparerFactory())))
                 return true;
 
+            // Implements IEquatable<typeof(y)>?
+            TypeInfo iequatableY = typeof(IEquatable<>).MakeGenericType(y.GetType()).GetTypeInfo();
+            if (iequatableY.IsAssignableFrom(x.GetType().GetTypeInfo()))
+            {
+                MethodInfo equalsMethod = iequatableY.GetDeclaredMethod(nameof(IEquatable<T>.Equals));
+                return (bool)equalsMethod.Invoke(x, new object[] { y });
+            }
+
+            // Implements IComparable<typeof(y)>?
+            TypeInfo icomparableY = typeof(IComparable<>).MakeGenericType(y.GetType()).GetTypeInfo();
+            if (icomparableY.IsAssignableFrom(x.GetType().GetTypeInfo()))
+            {
+                MethodInfo compareToMethod = icomparableY.GetDeclaredMethod(nameof(IComparable<T>.CompareTo));
+                try
+                {
+                    return (int)compareToMethod.Invoke(x, new object[] { y }) == 0;
+                }
+                catch
+                {
+                    // Some implementations of IComparable.CompareTo throw exceptions in
+                    // certain situations, such as if x can't compare against y.
+                    // If this happens, just swallow up the exception and continue comparing.
+                }
+            }
 
             // Last case, rely on object.Equals
             return object.Equals(x, y);
@@ -201,6 +225,8 @@ namespace Xunit.Sdk
             return dictionaryYKeys.Count == 0;
         }
 
+        private static MethodInfo s_compareTypedSetsMethod;
+
         bool? CheckIfSetsAreEqual(T x, T y, TypeInfo typeInfo)
         {
             if (!IsSet(typeInfo))
@@ -217,8 +243,10 @@ namespace Xunit.Sdk
             else
                 elementType = typeof(T).GenericTypeArguments[0];
 
-            MethodInfo method = GetType().GetTypeInfo().GetDeclaredMethod(nameof(CompareTypedSets));
-            method = method.MakeGenericMethod(new Type[] { elementType });
+            if (s_compareTypedSetsMethod == null)
+                s_compareTypedSetsMethod = GetType().GetTypeInfo().GetDeclaredMethod(nameof(CompareTypedSets));
+
+            MethodInfo method = s_compareTypedSetsMethod.MakeGenericMethod(new Type[] { elementType });
             return (bool)method.Invoke(this, new object[] { enumX, enumY });
         }
 

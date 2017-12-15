@@ -75,7 +75,7 @@ namespace Cake.ProGet.Tests.Asset
             
             var asset = new ProGetAssetDirectoryLister(_config);
             var result = asset.ListDirectory($"{Host}{assetDirectoryUri}");
-            Assert.Equal(1, result.Count);
+            Assert.Single(result);
         }
 
         public void Dispose()
