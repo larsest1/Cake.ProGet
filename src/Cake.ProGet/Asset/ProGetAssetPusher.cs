@@ -210,7 +210,8 @@ namespace Cake.ProGet.Asset
                     break;
                 }
                 var progress = startOffset + totalRead;
-                _log.Information($"{progress/totalSize * 100}% complete");
+
+                _log.Debug($"{progress/totalSize * 100}% complete");
             }
         }
     }
