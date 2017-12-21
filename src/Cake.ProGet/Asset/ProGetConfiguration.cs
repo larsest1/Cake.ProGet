@@ -1,4 +1,7 @@
-﻿namespace Cake.ProGet.Asset
+﻿using System;
+//// ReSharper disable UnusedAutoPropertyAccessor.Global
+
+namespace Cake.ProGet.Asset
 {
     /// <summary>
     /// The username and password for the ProGet instance.
@@ -14,5 +17,13 @@
         /// Gets or sets the ProGet Password
         /// </summary>
         public string ProGetPassword { get; set; }
+
+        /// <summary>
+        /// Gets or sets the request timeout.
+        /// </summary>
+        /// <value>
+        /// The request timeout.
+        /// </value>
+        public TimeSpan? RequestTimeout { get; set; }
     }
 }

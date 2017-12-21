@@ -25,18 +25,8 @@ namespace Cake.ProGet.Asset
         /// <exception cref="ArgumentNullException">Thrown if environment, log, or config are null.</exception>
         public ProGetAssetPusher(ICakeLog log, ProGetConfiguration configuration)
         {
-            if (log == null)
-            {
-                throw new ArgumentNullException(nameof(log));
-            }
-
-            if (configuration == null)
-            {
-                throw new ArgumentException(nameof(configuration));
-            }
-
-            _log = log;
-            _configuration = configuration;
+            _log = log ?? throw new ArgumentNullException(nameof(log));
+            _configuration = configuration ?? throw new ArgumentException(nameof(configuration));
         }
 
         /// <summary>
@@ -47,7 +37,7 @@ namespace Cake.ProGet.Asset
         public bool DoesAssetExist(string assetUri)
         {
             var client = new HttpClient();
-            ProGetAssetUtils.ConfigureAuthorizationForHttpClient(client, _configuration);
+            _configuration.Apply(client);
 
             var result = client.SendAsync(new HttpRequestMessage(HttpMethod.Head, assetUri)).Result;
             
@@ -77,7 +67,7 @@ namespace Cake.ProGet.Asset
         public bool DeleteAsset(string assetUri)
         {
             var client = new HttpClient();
-            ProGetAssetUtils.ConfigureAuthorizationForHttpClient(client, _configuration);
+            _configuration.Apply(client);
 
             var result = client.SendAsync(new HttpRequestMessage(HttpMethod.Delete, assetUri)).Result;
 
@@ -111,7 +101,7 @@ namespace Cake.ProGet.Asset
             if (new FileInfo(asset.FullPath).Length < ChunkSize)
             {
                 var client = new HttpClient();
-                ProGetAssetUtils.ConfigureAuthorizationForHttpClient(client, _configuration);
+                _configuration.Apply(client);
                 var result = client.PutAsync(new Uri(uri), new StreamContent(File.OpenRead(asset.FullPath))).Result;
                 if (result.IsSuccessStatusCode)
                 {
@@ -150,10 +140,13 @@ namespace Cake.ProGet.Asset
                         }
                         var client = (HttpWebRequest)WebRequest
                             .Create($"{uri}?multipart=upload&id={uuid}&index={index}&offset={offset}&totalSize={length}&partSize={currentChunkSize}&totalParts={totalParts}");
+
                         client.Method = "POST";
                         client.ContentLength = currentChunkSize;
                         client.AllowWriteStreamBuffering = false;
-                        ProGetAssetUtils.ConfigureAuthorizationForHttpWebRequest(client, _configuration);
+
+                        _configuration.Apply(client);
+
                         using (var requestStream = client.GetRequestStream())
                         {
                             CopyMaxBytes(fs, requestStream, currentChunkSize, offset, length);
@@ -174,7 +167,7 @@ namespace Cake.ProGet.Asset
                     var completeClient = (HttpWebRequest)WebRequest.Create($"{uri}?multipart=complete&id={uuid}");
                     completeClient.Method = "POST";
                     completeClient.ContentLength = 0;
-                    ProGetAssetUtils.ConfigureAuthorizationForHttpWebRequest(completeClient, _configuration);
+                    _configuration.Apply(completeClient);
                     try
                     {
                         using (completeClient.GetResponse())

@@ -58,7 +58,7 @@
     <Compile Include="Asset\ProGetAssetDownloader.cs" />
     <Compile Include="Asset\ProGetAssetPusher.cs" />
     <Compile Include="Asset\ProGetAssetAliases.cs" />
-    <Compile Include="Asset\ProGetAssetUtils.cs" />
+    <Compile Include="Asset\ProGetConfigurationExtensions.cs" />
     <Compile Include="Asset\ProGetConfiguration.cs" />
     <Compile Include="Asset\ProGetDirectoryListing.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

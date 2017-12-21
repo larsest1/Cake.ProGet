@@ -21,18 +21,13 @@ namespace Cake.ProGet.Asset
         /// <exception cref="ArgumentNullException">Thrown if environment, log, or config are null.</exception>
         public ProGetAssetDownloader(ProGetConfiguration configuration)
         {
-            if (configuration == null)
-            {
-                throw new ArgumentException(nameof(configuration));
-            }
-
-            _configuration = configuration;
+            _configuration = configuration ?? throw new ArgumentException(nameof(configuration));
         }
 
         public void GetSingleAsset(string assetUri, FilePath outputPath)
         {
             var client = new HttpClient();
-            ProGetAssetUtils.ConfigureAuthorizationForHttpClient(ref client, _configuration);
+            _configuration.Apply(client);
 
             var response = client.GetAsync(assetUri).Result;
             
@@ -57,7 +52,7 @@ namespace Cake.ProGet.Asset
         public void GetDirectoryOfAssets(string assetDirectoryUri, FilePath outputPath)
         {
             var client = new HttpClient();
-            ProGetAssetUtils.ConfigureAuthorizationForHttpClient(ref client, _configuration);
+            _configuration.Apply(client);
             
             var response = client.GetAsync($"{assetDirectoryUri}?format=zip&recursive=true").Result;
             

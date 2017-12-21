@@ -21,12 +21,7 @@ namespace Cake.ProGet.Asset
         /// <exception cref="ArgumentNullException">Thrown if environment, log, or config are null.</exception>
         public ProGetAssetDirectoryLister(ProGetConfiguration configuration)
         {
-            if (configuration == null)
-            {
-                throw new ArgumentException(nameof(configuration));
-            }
-
-            _configuration = configuration;
+            _configuration = configuration ?? throw new ArgumentException(nameof(configuration));
         }
 
         /// <summary>
@@ -37,7 +32,7 @@ namespace Cake.ProGet.Asset
         public void CreateDirectory(string directoryUri)
         {
             var client = new HttpClient();
-            ProGetAssetUtils.ConfigureAuthorizationForHttpClient(ref client, _configuration);
+            _configuration.Apply(client);
             
             var result = client.SendAsync(new HttpRequestMessage(HttpMethod.Post, directoryUri)).Result;
 
@@ -57,7 +52,7 @@ namespace Cake.ProGet.Asset
         public List<ProGetDirectoryListing> ListDirectory(string directoryUri, bool recursive = false)
         {
             var client = new HttpClient();
-            ProGetAssetUtils.ConfigureAuthorizationForHttpClient(ref client, _configuration);
+            _configuration.Apply(client);
 
             var result = client
                 .SendAsync(new HttpRequestMessage(HttpMethod.Get, $"{directoryUri}?recursive={recursive.ToString().ToLower()}")).Result;
