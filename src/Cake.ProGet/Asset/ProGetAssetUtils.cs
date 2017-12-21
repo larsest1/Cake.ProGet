@@ -11,7 +11,7 @@ namespace Cake.ProGet.Asset
     /// </summary>
     internal static class ProGetAssetUtils
     {
-        internal static void ConfigureAuthorizationForHttpClient(ref HttpClient client, ProGetConfiguration config)
+        internal static void ConfigureAuthorizationForHttpClient(HttpClient client, ProGetConfiguration config)
         {
             if (!string.IsNullOrWhiteSpace(config.ProGetUser) && !string.IsNullOrWhiteSpace(config.ProGetPassword))
             {
@@ -20,7 +20,7 @@ namespace Cake.ProGet.Asset
             }
         }
 
-        internal static void ConfigureAuthorizationForHttpWebRequest(ref HttpWebRequest client, ProGetConfiguration config)
+        internal static void ConfigureAuthorizationForHttpWebRequest(HttpWebRequest client, ProGetConfiguration config)
         {
             if (!string.IsNullOrWhiteSpace(config.ProGetUser) && !string.IsNullOrWhiteSpace(config.ProGetPassword))
             {

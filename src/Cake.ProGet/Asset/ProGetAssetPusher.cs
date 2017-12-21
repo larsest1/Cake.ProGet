@@ -47,7 +47,7 @@ namespace Cake.ProGet.Asset
         public bool DoesAssetExist(string assetUri)
         {
             var client = new HttpClient();
-            ProGetAssetUtils.ConfigureAuthorizationForHttpClient(ref client, _configuration);
+            ProGetAssetUtils.ConfigureAuthorizationForHttpClient(client, _configuration);
 
             var result = client.SendAsync(new HttpRequestMessage(HttpMethod.Head, assetUri)).Result;
             
@@ -77,7 +77,7 @@ namespace Cake.ProGet.Asset
         public bool DeleteAsset(string assetUri)
         {
             var client = new HttpClient();
-            ProGetAssetUtils.ConfigureAuthorizationForHttpClient(ref client, _configuration);
+            ProGetAssetUtils.ConfigureAuthorizationForHttpClient(client, _configuration);
 
             var result = client.SendAsync(new HttpRequestMessage(HttpMethod.Delete, assetUri)).Result;
 
@@ -111,7 +111,7 @@ namespace Cake.ProGet.Asset
             if (new FileInfo(asset.FullPath).Length < ChunkSize)
             {
                 var client = new HttpClient();
-                ProGetAssetUtils.ConfigureAuthorizationForHttpClient(ref client, _configuration);
+                ProGetAssetUtils.ConfigureAuthorizationForHttpClient(client, _configuration);
                 var result = client.PutAsync(new Uri(uri), new StreamContent(File.OpenRead(asset.FullPath))).Result;
                 if (result.IsSuccessStatusCode)
                 {
@@ -153,7 +153,7 @@ namespace Cake.ProGet.Asset
                         client.Method = "POST";
                         client.ContentLength = currentChunkSize;
                         client.AllowWriteStreamBuffering = false;
-                        ProGetAssetUtils.ConfigureAuthorizationForHttpWebRequest(ref client, _configuration);
+                        ProGetAssetUtils.ConfigureAuthorizationForHttpWebRequest(client, _configuration);
                         using (var requestStream = client.GetRequestStream())
                         {
                             CopyMaxBytes(fs, requestStream, currentChunkSize, offset, length);
@@ -174,7 +174,7 @@ namespace Cake.ProGet.Asset
                     var completeClient = (HttpWebRequest)WebRequest.Create($"{uri}?multipart=complete&id={uuid}");
                     completeClient.Method = "POST";
                     completeClient.ContentLength = 0;
-                    ProGetAssetUtils.ConfigureAuthorizationForHttpWebRequest(ref completeClient, _configuration);
+                    ProGetAssetUtils.ConfigureAuthorizationForHttpWebRequest(completeClient, _configuration);
                     try
                     {
                         using (completeClient.GetResponse())
