@@ -40,7 +40,7 @@ namespace Cake.ProGet.Asset
             _configuration.Apply(client);
 
             var result = client.SendAsync(new HttpRequestMessage(HttpMethod.Head, assetUri)).Result;
-            
+
             if (result.StatusCode.Equals(HttpStatusCode.Unauthorized) || result.StatusCode.Equals(HttpStatusCode.Forbidden))
             {
                 throw new CakeException("Authorization to ProGet server failed; Credentials were incorrect, or not supplied.");
@@ -56,9 +56,9 @@ namespace Cake.ProGet.Asset
                 return false;
             }
 
-            throw new CakeException($"An unknown error occurred while checking for asset on the ProGet Server. HTTP {result.StatusCode}"); 
+            throw new CakeException($"An unknown error occurred while checking for asset on the ProGet Server. HTTP {result.StatusCode}");
         }
-        
+
         /// <summary>
         /// Deletes an asset from the Asset Directory.
         /// </summary>
@@ -97,7 +97,7 @@ namespace Cake.ProGet.Asset
         public void Publish(FilePath asset, string uri)
         {
             _log.Information($"Publishing {asset} to {uri}...");
-    
+
             if (new FileInfo(asset.FullPath).Length < ChunkSize)
             {
                 var client = new HttpClient();
@@ -116,7 +116,7 @@ namespace Cake.ProGet.Asset
                     throw new CakeException("Authorization to ProGet server failed; Credentials were incorrect, or not supplied.");
                 }
             }
-            else 
+            else
             {
                 // the following is generally adapted from inedo documentation: https://inedo.com/support/documentation/proget/reference/asset-directories-api
                 using (var fs = new FileStream(asset.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan))
@@ -134,7 +134,7 @@ namespace Cake.ProGet.Asset
                     {
                         var offset = index * ChunkSize;
                         var currentChunkSize = ChunkSize;
-                        if (index == (totalParts - 1)) 
+                        if (index == (totalParts - 1))
                         {
                             currentChunkSize = (int)length - offset;
                         }
@@ -151,7 +151,7 @@ namespace Cake.ProGet.Asset
                         {
                             CopyMaxBytes(fs, requestStream, currentChunkSize, offset, length);
                         }
-                        
+
                         try
                         {
                             using (client.GetResponse())
@@ -160,14 +160,17 @@ namespace Cake.ProGet.Asset
                         }
                         catch (WebException ex)
                         {
-                            throw new CakeException($"Exception occurred while uploading part {index}. HTTP status was {((HttpWebResponse)ex.Response).StatusCode}");
+                            throw new CakeException($"Exception occurred while uploading part {index}. HTTP status was {((HttpWebResponse)ex.Response).StatusCode}", ex);
                         }
                     }
+
                     _log.Information("Completing upload...");
                     var completeClient = (HttpWebRequest)WebRequest.Create($"{uri}?multipart=complete&id={uuid}");
                     completeClient.Method = "POST";
                     completeClient.ContentLength = 0;
+
                     _configuration.Apply(completeClient);
+
                     try
                     {
                         using (completeClient.GetResponse())
@@ -176,12 +179,12 @@ namespace Cake.ProGet.Asset
                     }
                     catch (WebException ex)
                     {
-                        throw new CakeException($"Exception occurred while finalizing multipart upload. HTTP status was {((HttpWebResponse)ex.Response).StatusCode}");
+                        throw new CakeException($"Exception occurred while finalizing multipart upload. HTTP status was {((HttpWebResponse)ex.Response)?.StatusCode.ToString() ?? "unknown"}", ex);
                     }
                 }
             }
         }
-    
+
         private void CopyMaxBytes(Stream source, Stream target, int maxBytes, long startOffset, long totalSize)
         {
             var buffer = new byte[32767];
@@ -193,9 +196,9 @@ namespace Cake.ProGet.Asset
                 {
                     break;
                 }
-    
+
                 target.Write(buffer, 0, bytesRead);
-    
+
                 totalRead += bytesRead;
 
                 if (totalRead >= maxBytes)
@@ -204,7 +207,7 @@ namespace Cake.ProGet.Asset
                 }
                 var progress = startOffset + totalRead;
 
-                _log.Debug($"{progress/totalSize * 100}% complete");
+                _log.Debug($"{Math.Round(progress / (double)totalSize * 100, 2)}% complete");
             }
         }
     }
