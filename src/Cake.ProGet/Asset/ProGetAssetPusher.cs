@@ -129,6 +129,9 @@ namespace Cake.ProGet.Asset
                         totalParts++;
                     }
 
+                    // provide stateful byte copier so we can be less chatty about logging progress.
+                    var copier = new ByteCopier(_log, length);
+
                     var uuid = Guid.NewGuid().ToString("N");
                     for (var index = 0; index < totalParts; index++)
                     {
@@ -149,7 +152,7 @@ namespace Cake.ProGet.Asset
 
                         using (var requestStream = client.GetRequestStream())
                         {
-                            CopyMaxBytes(fs, requestStream, currentChunkSize, offset, length);
+                            copier.CopyMaxBytes(fs, requestStream, currentChunkSize, offset);
                         }
 
                         try
@@ -160,7 +163,7 @@ namespace Cake.ProGet.Asset
                         }
                         catch (WebException ex)
                         {
-                            throw new CakeException($"Exception occurred while uploading part {index}. HTTP status was {((HttpWebResponse)ex.Response).StatusCode}", ex);
+                            throw new CakeException($"Exception occurred while uploading part {index}. HTTP status was {((HttpWebResponse)ex.Response)?.StatusCode.ToString() ?? "unknown"}", ex);
                         }
                     }
 
@@ -185,29 +188,48 @@ namespace Cake.ProGet.Asset
             }
         }
 
-        private void CopyMaxBytes(Stream source, Stream target, int maxBytes, long startOffset, long totalSize)
+        private sealed class ByteCopier
         {
-            var buffer = new byte[32767];
-            var totalRead = 0;
-            while (true)
+            private readonly long _total;
+            private readonly ICakeLog _log;
+
+            private int _lastProgress;
+
+            public ByteCopier(ICakeLog log, long total)
             {
-                var bytesRead = source.Read(buffer, 0, Math.Min(maxBytes - totalRead, buffer.Length));
-                if (bytesRead == 0)
+                _total = total;
+                _log = log ?? throw new ArgumentNullException(nameof(log));
+            }
+
+            public void CopyMaxBytes(Stream source, Stream target, int maxBytes, long startOffset)
+            {
+                var buffer = new byte[32767];
+                var totalRead = 0;
+                while (true)
                 {
-                    break;
+                    var bytesRead = source.Read(buffer, 0, Math.Min(maxBytes - totalRead, buffer.Length));
+                    if (bytesRead == 0)
+                    {
+                        break;
+                    }
+
+                    target.Write(buffer, 0, bytesRead);
+
+                    totalRead += bytesRead;
+
+                    if (totalRead >= maxBytes)
+                    {
+                        break;
+                    }
+
+                    // don't be so verbose!
+                    var current = Math.Round((startOffset + totalRead) / (double)_total * 100, 2);
+                    if ((int)current > _lastProgress)
+                    {
+                        _log.Debug($"Uploading ... {current}%");
+                        _lastProgress = (int)current;
+                    }
                 }
-
-                target.Write(buffer, 0, bytesRead);
-
-                totalRead += bytesRead;
-
-                if (totalRead >= maxBytes)
-                {
-                    break;
-                }
-                var progress = startOffset + totalRead;
-
-                _log.Debug($"{Math.Round(progress / (double)totalSize * 100, 2)}% complete");
             }
         }
     }
