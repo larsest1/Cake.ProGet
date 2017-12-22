@@ -140,7 +140,7 @@ namespace Cake.ProGet.Tests.Asset
             }
             var result = Record.Exception(() => asset.Publish(tempFile, $"{Host}{assetUri}"));
             File.Delete(tempFile.FullPath);
-            Assert.IsCakeException(result, "Upload failed. This request would have overwrote an existing package.");
+            Assert.IsCakeException(result, "Upload failed. This request would have overwritten an existing package.");
         }
 
         public void Dispose()

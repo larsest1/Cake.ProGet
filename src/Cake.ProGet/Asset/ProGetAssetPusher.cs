@@ -109,7 +109,7 @@ namespace Cake.ProGet.Asset
                 }
                 else if (result.StatusCode.Equals(HttpStatusCode.BadRequest))
                 {
-                    throw new CakeException("Upload failed. This request would have overwrote an existing package.");
+                    throw new CakeException("Upload failed. This request would have overwritten an existing package.");
                 }
                 else if (result.StatusCode.Equals(HttpStatusCode.Unauthorized) || result.StatusCode.Equals(HttpStatusCode.Forbidden))
                 {
