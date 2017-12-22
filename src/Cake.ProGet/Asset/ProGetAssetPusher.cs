@@ -25,18 +25,8 @@ namespace Cake.ProGet.Asset
         /// <exception cref="ArgumentNullException">Thrown if environment, log, or config are null.</exception>
         public ProGetAssetPusher(ICakeLog log, ProGetConfiguration configuration)
         {
-            if (log == null)
-            {
-                throw new ArgumentNullException(nameof(log));
-            }
-
-            if (configuration == null)
-            {
-                throw new ArgumentException(nameof(configuration));
-            }
-
-            _log = log;
-            _configuration = configuration;
+            _log = log ?? throw new ArgumentNullException(nameof(log));
+            _configuration = configuration ?? throw new ArgumentException(nameof(configuration));
         }
 
         /// <summary>
@@ -47,10 +37,10 @@ namespace Cake.ProGet.Asset
         public bool DoesAssetExist(string assetUri)
         {
             var client = new HttpClient();
-            ProGetAssetUtils.ConfigureAuthorizationForHttpClient(ref client, _configuration);
+            _configuration.Apply(client);
 
             var result = client.SendAsync(new HttpRequestMessage(HttpMethod.Head, assetUri)).Result;
-            
+
             if (result.StatusCode.Equals(HttpStatusCode.Unauthorized) || result.StatusCode.Equals(HttpStatusCode.Forbidden))
             {
                 throw new CakeException("Authorization to ProGet server failed; Credentials were incorrect, or not supplied.");
@@ -66,9 +56,9 @@ namespace Cake.ProGet.Asset
                 return false;
             }
 
-            throw new CakeException($"An unknown error occurred while checking for asset on the ProGet Server. HTTP {result.StatusCode}"); 
+            throw new CakeException($"An unknown error occurred while checking for asset on the ProGet Server. HTTP {result.StatusCode}");
         }
-        
+
         /// <summary>
         /// Deletes an asset from the Asset Directory.
         /// </summary>
@@ -77,7 +67,7 @@ namespace Cake.ProGet.Asset
         public bool DeleteAsset(string assetUri)
         {
             var client = new HttpClient();
-            ProGetAssetUtils.ConfigureAuthorizationForHttpClient(ref client, _configuration);
+            _configuration.Apply(client);
 
             var result = client.SendAsync(new HttpRequestMessage(HttpMethod.Delete, assetUri)).Result;
 
@@ -107,11 +97,11 @@ namespace Cake.ProGet.Asset
         public void Publish(FilePath asset, string uri)
         {
             _log.Information($"Publishing {asset} to {uri}...");
-    
+
             if (new FileInfo(asset.FullPath).Length < ChunkSize)
             {
                 var client = new HttpClient();
-                ProGetAssetUtils.ConfigureAuthorizationForHttpClient(ref client, _configuration);
+                _configuration.Apply(client);
                 var result = client.PutAsync(new Uri(uri), new StreamContent(File.OpenRead(asset.FullPath))).Result;
                 if (result.IsSuccessStatusCode)
                 {
@@ -119,14 +109,14 @@ namespace Cake.ProGet.Asset
                 }
                 else if (result.StatusCode.Equals(HttpStatusCode.BadRequest))
                 {
-                    throw new CakeException("Upload failed. This request would have overwrote an existing package.");
+                    throw new CakeException("Upload failed. This request would have overwritten an existing package.");
                 }
                 else if (result.StatusCode.Equals(HttpStatusCode.Unauthorized) || result.StatusCode.Equals(HttpStatusCode.Forbidden))
                 {
                     throw new CakeException("Authorization to ProGet server failed; Credentials were incorrect, or not supplied.");
                 }
             }
-            else 
+            else
             {
                 // the following is generally adapted from inedo documentation: https://inedo.com/support/documentation/proget/reference/asset-directories-api
                 using (var fs = new FileStream(asset.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan))
@@ -139,26 +129,32 @@ namespace Cake.ProGet.Asset
                         totalParts++;
                     }
 
+                    // provide stateful byte copier so we can be less chatty about logging progress.
+                    var copier = new ByteCopier(_log, length);
+
                     var uuid = Guid.NewGuid().ToString("N");
                     for (var index = 0; index < totalParts; index++)
                     {
                         var offset = index * ChunkSize;
                         var currentChunkSize = ChunkSize;
-                        if (index == (totalParts - 1)) 
+                        if (index == (totalParts - 1))
                         {
                             currentChunkSize = (int)length - offset;
                         }
                         var client = (HttpWebRequest)WebRequest
                             .Create($"{uri}?multipart=upload&id={uuid}&index={index}&offset={offset}&totalSize={length}&partSize={currentChunkSize}&totalParts={totalParts}");
+
                         client.Method = "POST";
                         client.ContentLength = currentChunkSize;
                         client.AllowWriteStreamBuffering = false;
-                        ProGetAssetUtils.ConfigureAuthorizationForHttpWebRequest(ref client, _configuration);
+
+                        _configuration.Apply(client);
+
                         using (var requestStream = client.GetRequestStream())
                         {
-                            CopyMaxBytes(fs, requestStream, currentChunkSize, offset, length);
+                            copier.CopyMaxBytes(fs, requestStream, currentChunkSize, offset);
                         }
-                        
+
                         try
                         {
                             using (client.GetResponse())
@@ -167,14 +163,17 @@ namespace Cake.ProGet.Asset
                         }
                         catch (WebException ex)
                         {
-                            throw new CakeException($"Exception occurred while uploading part {index}. HTTP status was {((HttpWebResponse)ex.Response).StatusCode}");
+                            throw new CakeException($"Exception occurred while uploading part {index}. HTTP status was {((HttpWebResponse)ex.Response)?.StatusCode.ToString() ?? "unknown"}", ex);
                         }
                     }
+
                     _log.Information("Completing upload...");
                     var completeClient = (HttpWebRequest)WebRequest.Create($"{uri}?multipart=complete&id={uuid}");
                     completeClient.Method = "POST";
                     completeClient.ContentLength = 0;
-                    ProGetAssetUtils.ConfigureAuthorizationForHttpWebRequest(ref completeClient, _configuration);
+
+                    _configuration.Apply(completeClient);
+
                     try
                     {
                         using (completeClient.GetResponse())
@@ -183,35 +182,54 @@ namespace Cake.ProGet.Asset
                     }
                     catch (WebException ex)
                     {
-                        throw new CakeException($"Exception occurred while finalizing multipart upload. HTTP status was {((HttpWebResponse)ex.Response).StatusCode}");
+                        throw new CakeException($"Exception occurred while finalizing multipart upload. HTTP status was {((HttpWebResponse)ex.Response)?.StatusCode.ToString() ?? "unknown"}", ex);
                     }
                 }
             }
         }
-    
-        private void CopyMaxBytes(Stream source, Stream target, int maxBytes, long startOffset, long totalSize)
+
+        private sealed class ByteCopier
         {
-            var buffer = new byte[32767];
-            var totalRead = 0;
-            while (true)
+            private readonly long _total;
+            private readonly ICakeLog _log;
+
+            private int _lastProgress;
+
+            public ByteCopier(ICakeLog log, long total)
             {
-                var bytesRead = source.Read(buffer, 0, Math.Min(maxBytes - totalRead, buffer.Length));
-                if (bytesRead == 0)
-                {
-                    break;
-                }
-    
-                target.Write(buffer, 0, bytesRead);
-    
-                totalRead += bytesRead;
+                _total = total;
+                _log = log ?? throw new ArgumentNullException(nameof(log));
+            }
 
-                if (totalRead >= maxBytes)
+            public void CopyMaxBytes(Stream source, Stream target, int maxBytes, long startOffset)
+            {
+                var buffer = new byte[32767];
+                var totalRead = 0;
+                while (true)
                 {
-                    break;
-                }
-                var progress = startOffset + totalRead;
+                    var bytesRead = source.Read(buffer, 0, Math.Min(maxBytes - totalRead, buffer.Length));
+                    if (bytesRead == 0)
+                    {
+                        break;
+                    }
 
-                _log.Debug($"{progress/totalSize * 100}% complete");
+                    target.Write(buffer, 0, bytesRead);
+
+                    totalRead += bytesRead;
+
+                    if (totalRead >= maxBytes)
+                    {
+                        break;
+                    }
+
+                    // don't be so verbose!
+                    var current = Math.Round((startOffset + totalRead) / (double)_total * 100, 2);
+                    if ((int)current > _lastProgress)
+                    {
+                        _log.Debug($"Uploading ... {current}%");
+                        _lastProgress = (int)current;
+                    }
+                }
             }
         }
     }
