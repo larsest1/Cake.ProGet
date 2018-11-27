@@ -9,6 +9,8 @@ BuildParameters.SetParameters(context: Context,
                             repositoryOwner: "cake-contrib",
                             repositoryName: "Cake.ProGet");
 
+((CakeTask)BuildParameters.Tasks.UploadCoverallsReportTask.Task).Actions.Clear();
+
 BuildParameters.PrintParameters(Context);
 
 ToolSettings.SetToolSettings(context: Context,
