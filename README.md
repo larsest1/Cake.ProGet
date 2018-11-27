@@ -5,18 +5,18 @@
  * Provides aliases for the functionality found in `upack.exe` ([available here](http://cdn.inedo.com/downloads/proget/upack1.0.0.zip)) .
  * Provides aliases for the [Asset Directory](https://inedo.com/support/documentation/proget/core-concepts/asset-directories) functionality.
 
-[![Build status](https://ci.appveyor.com/api/projects/status/2xkeb02h6rvkwk0b?svg=true)](https://ci.appveyor.com/project/austinlparker/cake-proget)
+[![Build status](https://ci.appveyor.com/api/projects/status/2tst3twn2nu4qool?svg=true)](https://ci.appveyor.com/project/cakecontrib/cake-proget)
 
 
  ## Table of Contents
 
-1. [Building](https://github.com/apprenda/cake.proget#building)
-2. [Pre-Requisites](https://github.com/apprenda/cake.proget#pre-requisites)
-3. [Examples](https://github.com/apprenda/cake.proget#examples)    
-    - [UPack](https://github.com/apprenda/cake.proget#universal-package)
-    - [ProGet Assets](https://github.com/apprenda/cake.proget#proget-assets)
-4. [Contributing](https://github.com/apprenda/cake.proget#contributing)
-5. [License](https://github.com/apprenda/cake.proget#license)
+1. [Building](#building)
+2. [Pre-Requisites](#pre-requisites)
+3. [Examples](#examples)
+    - [UPack](#universal-package)
+    - [ProGet Assets](#proget-assets)
+4. [Contributing](#contributing)
+5. [License](#license)
 
 ## Building
 This package is built using [Cake.Recipe](https://github.com/cake-contrib/Cake.Recipe)
@@ -38,13 +38,13 @@ The Cake.ProGet add-in is intended to be used in conjunction with your organizat
 ## Examples
 
 ### Universal Package
-A full example [can be found here](https://github.com/apprenda/cake.proget/blob/develop/examples/upack)
+A full example [can be found here](https://github.com/cake-contrib/cake.proget/blob/master/examples/upack)
 
 ```
 #addin "nuget:?package=Cake.ProGet"
 
 Task("Create-Package")
-    .Description("Creates a universal package")    
+    .Description("Creates a universal package")
     .Does(() => {
         Pack(new UniversalPackagePackSettings(
             "./UPack.Example.uspec",
@@ -64,7 +64,7 @@ Task("Publish-Package")
 ```
 
 ### ProGet Assets
-A full example [can be found here](https://github.com/apprenda/cake.proget/blob/develop/examples/assets)
+A full example [can be found here](https://github.com/cake-contrib/cake.proget/blob/master/examples/assets)
 
 ```
 #addin "nuget:?package=Cake.ProGet"
@@ -90,7 +90,7 @@ Task("Publish-Package")
 
 ## Contributing
 
-If you're thinking about contributing to Cake.ProGet, please make sure you've read the [contribution guidelines](https://github.com/apprenda/cake.proget/blob/develop/CONTRIBUTING.md) before creating your first pull request.
+If you're thinking about contributing to Cake.ProGet, please make sure you've read the [contribution guidelines](https://github.com/cake-contrib/cake.proget/blob/master/CONTRIBUTING.md) before creating your first pull request.
 
 * Fork the repository.
 * Create a branch to work in.
@@ -102,7 +102,7 @@ If you're thinking about contributing to Cake.ProGet, please make sure you've re
 
 Copyright © Apprenda Inc., and contributors.
 
-Cake.ProGet is provided as-is under the MIT license. For more information see [LICENSE](https://github.com/apprenda/cake.proget/blob/develop/LICENSE).
+Cake.ProGet is provided as-is under the MIT license. For more information see [LICENSE](https://github.com/cake-contrib/cake.proget/blob/master/LICENSE).
 
 ## Code of Conduct
 
