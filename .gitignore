@@ -5,7 +5,6 @@
 [Ll]ib/
 [Pp]ackages/
 /[Aa]rtifacts/
-/[Tt]ools/
 *.sln.ide/
 
 # .NET CLI
@@ -19,19 +18,15 @@ dotnet-install.sh*
 launchSettings.json
 project.lock.json
 
+### Cake ###
+tools/*
+!tools/packages.config
+
 # Rider
 .idea/
 
 # Build related
 build-results/
-tools/Cake/
-tools/xunit.runners/
-tools/xunit.runner.console/
-tools/nuget.exe
-tools/gitreleasemanager/
-tools/GitVersion.CommandLine/
-tools/Addins/
-tools/packages.config.md5sum
 
 # mstest test results
 TestResults
