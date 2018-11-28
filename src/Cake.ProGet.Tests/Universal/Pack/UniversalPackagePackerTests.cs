@@ -130,16 +130,14 @@ namespace Cake.ProGet.Tests.Universal.Pack
             Assert.IsCakeExceptionWithMessage(result, s => s.StartsWith("Source directory does not exist at"));
         }
 
-        [Theory]
-        [InlineData("./target-directory", "pack \"/Working/test.uspec\" \"/Working/test/pack-source\" --targetDirectory=\"/Working/target-directory\"")]
-        [InlineData(null, "pack \"/Working/test.uspec\" \"/Working/test/pack-source\"")]
-        public void Should_Add_TargetDirectory_To_Arguments_If_Set(string targetDirectory, string expected)
+        [Fact]
+        public void Should_Add_TargetDirectory_To_Arguments_If_Set()
         {
             // Given
             var fixture = new UniversalPackagePackerFixture
             {
                 Settings = {
-                    TargetDirectory = string.IsNullOrEmpty(targetDirectory) ? null : new DirectoryPath(targetDirectory)
+                    TargetDirectory = new DirectoryPath("./target-directory")
                 }
             };
 
@@ -147,7 +145,25 @@ namespace Cake.ProGet.Tests.Universal.Pack
             var result = fixture.Run();
 
             // Then
-            Assert.Equal(expected, result.Args);
+            Assert.Contains("/Working/target-directory", result.Args);
+        }
+        
+        [Fact]
+        public void Should_Not_Add_TargetDirectory_To_Arguments_If_Null()
+        {
+            // Given
+            var fixture = new UniversalPackagePackerFixture
+            {
+                Settings = {
+                    TargetDirectory = null
+                }
+            };
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.DoesNotContain("--targetDirectory", result.Args);
         }
     }
 }

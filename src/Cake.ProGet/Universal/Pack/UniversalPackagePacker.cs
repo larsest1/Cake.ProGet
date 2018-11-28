@@ -58,9 +58,9 @@ namespace Cake.ProGet.Universal.Pack
             var builder = new ProcessArgumentBuilder();
 
             builder.Append("pack");
-
-            builder.AppendQuoted(settings.MetadataFilePath.MakeAbsolute(Environment).FullPath);
+            
             builder.AppendQuoted(settings.SourceDirectory.MakeAbsolute(Environment).FullPath);
+            builder.AppendQuoted("--metadata=\"{0}\"", settings.MetadataFilePath.MakeAbsolute(Environment).FullPath);
 
             // make sure the target directory exists.
             if (settings.TargetDirectory != null)
