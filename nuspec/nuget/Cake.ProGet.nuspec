@@ -20,5 +20,6 @@
     <file src="Cake.ProGet.pdb" target="lib\net461" />
     <file src="Cake.ProGet.xml" target="lib\net461" />
 	<file src="..\..\..\upack.exe" target="tools" />
+	<file src="..\..\..\..\LICENSE" target="tools\LICENSE-UPACK" />
   </files>
 </package>
