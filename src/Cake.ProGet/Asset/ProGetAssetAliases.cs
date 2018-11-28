@@ -23,7 +23,7 @@ namespace Cake.ProGet.Asset
         /// <exception cref="ArgumentNullException">Thrown if context is null.</exception>
         [CakeMethodAlias]
         [CakeAliasCategory("ProGetAsset")]
-        public static void PushAsset(this ICakeContext context, FilePath assetPath, string assetUri, ProGetConfiguration config)
+        public static void ProGetPushAsset(this ICakeContext context, FilePath assetPath, string assetUri, ProGetConfiguration config)
         {
             if (context == null)
             {
@@ -49,7 +49,7 @@ namespace Cake.ProGet.Asset
         /// <exception cref="ArgumentNullException">Thrown if context is null.</exception>
         [CakeMethodAlias]
         [CakeAliasCategory("ProGetAsset")]
-        public static bool DoesAssetExist(this ICakeContext context, string assetUri, ProGetConfiguration config)
+        public static bool ProGetDoesAssetExist(this ICakeContext context, string assetUri, ProGetConfiguration config)
         {
             if (context == null)
             {
@@ -75,7 +75,7 @@ namespace Cake.ProGet.Asset
         /// <exception cref="ArgumentNullException">Thrown if context or config is null.</exception>
         [CakeMethodAlias]
         [CakeAliasCategory("ProGetAsset")]
-        public static bool DeleteAsset(this ICakeContext context, string assetUri, ProGetConfiguration config)
+        public static bool ProGetDeleteAsset(this ICakeContext context, string assetUri, ProGetConfiguration config)
         {
             if (context == null)
             {
@@ -101,7 +101,7 @@ namespace Cake.ProGet.Asset
         /// <exception cref="ArgumentNullException">Thrown if context or config is null.</exception>
         [CakeMethodAlias]
         [CakeAliasCategory("ProGetAsset")]
-        public static void DownloadAsset(this ICakeContext context, string assetUri, FilePath outputPath,
+        public static void ProGetDownloadAsset(this ICakeContext context, string assetUri, FilePath outputPath,
             ProGetConfiguration config)
         {
             if (context == null)
@@ -128,7 +128,7 @@ namespace Cake.ProGet.Asset
         /// <exception cref="ArgumentNullException">Thrown if context or config is null.</exception>
         [CakeMethodAlias]
         [CakeAliasCategory("ProGetAsset")]
-        public static void DownloadAssetDirectory(this ICakeContext context, string assetDirectoryUri,
+        public static void ProGetDownloadAssetDirectory(this ICakeContext context, string assetDirectoryUri,
             FilePath outputPath, ProGetConfiguration config)
         {
             if (context == null)
@@ -154,7 +154,7 @@ namespace Cake.ProGet.Asset
         /// <exception cref="ArgumentNullException">Thrown if context or config is null.</exception>
         [CakeMethodAlias]
         [CakeAliasCategory("ProGetAsset")]
-        public static void CreateAssetDirectory(this ICakeContext context, string assetDirectoryUri,
+        public static void ProGetCreateAssetDirectory(this ICakeContext context, string assetDirectoryUri,
             ProGetConfiguration config)
         {
             if (context == null)
@@ -181,7 +181,7 @@ namespace Cake.ProGet.Asset
         /// <exception cref="ArgumentNullException">Thrown if context or config is null.</exception>
         [CakeMethodAlias]
         [CakeAliasCategory("ProGetAsset")]
-        public static List<ProGetDirectoryListing> ListAssetDirectory(this ICakeContext context, string assetDirectoryUri,
+        public static List<ProGetDirectoryListing> ProGetListAssetDirectory(this ICakeContext context, string assetDirectoryUri,
             ProGetConfiguration config)
         {
             if (context == null)

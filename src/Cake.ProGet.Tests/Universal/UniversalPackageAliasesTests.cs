@@ -15,7 +15,7 @@ namespace Cake.ProGet.Tests.Universal
             public void Should_Throw_If_Cake_Context_Is_Null()
             {
                 // Given, When
-                var result = Record.Exception(() => UniversalPackageAliases.Pack(null, new UniversalPackagePackSettings()));
+                var result = Record.Exception(() => UniversalPackageAliases.UPackPack(null, new UniversalPackagePackSettings()));
                 
                 // Then
                 Assert.IsArgumentNullException(result, "context");
@@ -28,7 +28,7 @@ namespace Cake.ProGet.Tests.Universal
             public void Should_Throw_If_Cake_Context_Is_Null()
             {
                 // Given, When
-                var result = Record.Exception(() => UniversalPackageAliases.Push(null, new UniversalPackagePushSettings()));
+                var result = Record.Exception(() => UniversalPackageAliases.UPackPush(null, new UniversalPackagePushSettings()));
 
                 // Then
                 Assert.IsArgumentNullException(result, "context");
@@ -41,7 +41,7 @@ namespace Cake.ProGet.Tests.Universal
             public void Should_Throw_If_Cake_Context_Is_Null()
             {
                 // Given, When
-                var result = Record.Exception(() => UniversalPackageAliases.Install(null, new UniversalPackageInstallSettings()));
+                var result = Record.Exception(() => UniversalPackageAliases.UPackInstall(null, new UniversalPackageInstallSettings()));
 
                 // Then
                 Assert.IsArgumentNullException(result, "context");
@@ -54,7 +54,7 @@ namespace Cake.ProGet.Tests.Universal
             public void Should_Throw_If_Cake_Context_Is_Null()
             {
                 // Given, When
-                var result = Record.Exception(() => UniversalPackageAliases.Unpack(null, new UniversalPackageUnpackSettings()));
+                var result = Record.Exception(() => UniversalPackageAliases.UPackUnpack(null, new UniversalPackageUnpackSettings()));
 
                 // Then
                 Assert.IsArgumentNullException(result, "context");

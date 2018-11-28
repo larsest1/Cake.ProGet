@@ -26,7 +26,7 @@ namespace Cake.ProGet.Universal
         /// <exception cref="System.ArgumentNullException">Thrown if the context is null</exception>
         [CakeMethodAlias]
         [CakeAliasCategory("Pack")]
-        public static void Pack(this ICakeContext context, UniversalPackagePackSettings settings)
+        public static void UPackPack(this ICakeContext context, UniversalPackagePackSettings settings)
         {
             if (context == null)
             {
@@ -47,7 +47,7 @@ namespace Cake.ProGet.Universal
         /// <exception cref="System.ArgumentNullException">Thrown if the context is null</exception>
         [CakeMethodAlias]
         [CakeAliasCategory("Push")]
-        public static void Push(this ICakeContext context, UniversalPackagePushSettings settings)
+        public static void UPackPush(this ICakeContext context, UniversalPackagePushSettings settings)
         {
             if (context == null)
             {
@@ -68,7 +68,7 @@ namespace Cake.ProGet.Universal
         /// <exception cref="System.ArgumentNullException">Thrown if the context is null</exception>
         [CakeMethodAlias]
         [CakeAliasCategory("Unpack")]
-        public static void Unpack(this ICakeContext context, UniversalPackageUnpackSettings settings)
+        public static void UPackUnpack(this ICakeContext context, UniversalPackageUnpackSettings settings)
         {
             if (context == null)
             {
@@ -89,7 +89,7 @@ namespace Cake.ProGet.Universal
         /// <exception cref="System.ArgumentNullException">Thrown if the context is null</exception>
         [CakeMethodAlias]
         [CakeAliasCategory("Install")]
-        public static void Install(this ICakeContext context, UniversalPackageInstallSettings settings)
+        public static void UPackInstall(this ICakeContext context, UniversalPackageInstallSettings settings)
         {
             if (context == null)
             {

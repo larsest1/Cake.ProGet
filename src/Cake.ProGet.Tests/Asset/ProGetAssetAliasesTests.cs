@@ -12,7 +12,7 @@ namespace Cake.ProGet.Tests.Asset
             public void Should_Throw_If_Cake_Context_Is_Null()
             {
                 var result = Record.Exception(() =>
-                    ProGetAssetAliases.PushAsset(null, new FilePath("foo"), "http://foo.com", new ProGetConfiguration()));
+                    ProGetAssetAliases.ProGetPushAsset(null, new FilePath("foo"), "http://foo.com", new ProGetConfiguration()));
                 Assert.IsArgumentNullException(result, "context");
             }    
         }
@@ -23,7 +23,7 @@ namespace Cake.ProGet.Tests.Asset
             public void Should_Throw_If_Cake_Context_Is_Null()
             {
                 var result = Record.Exception(() =>
-                        ProGetAssetAliases.CreateAssetDirectory(null, "http://localhost:9091/content/testdir",
+                        ProGetAssetAliases.ProGetCreateAssetDirectory(null, "http://localhost:9091/content/testdir",
                     new ProGetConfiguration()));
                 Assert.IsArgumentNullException(result, "context");
             }
@@ -34,7 +34,7 @@ namespace Cake.ProGet.Tests.Asset
             [Fact]
             public void Should_Throw_If_Cake_Context_Is_Null()
             {
-                var result = Record.Exception(() => ProGetAssetAliases.DownloadAsset(null,
+                var result = Record.Exception(() => ProGetAssetAliases.ProGetDownloadAsset(null,
                     "http://localhost:9091/content/testdir/asset.gif", "./out/asset.gif", new ProGetConfiguration()));
                 Assert.IsArgumentNullException(result, "context");
             }
