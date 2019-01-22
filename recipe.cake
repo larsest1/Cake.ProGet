@@ -1,8 +1,8 @@
-#load nuget:https://www.myget.org/F/cake-contrib/api/v2?package=Cake.Recipe&version=0.3.0-unstable0427
+#load nuget:https://www.myget.org/F/cake-contrib/api/v2?package=Cake.Recipe&version=0.3.0-unstable0463
 
 Environment.SetVariableNames();
 
-BuildParameters.SetParameters(context: Context, 
+BuildParameters.SetParameters(context: Context,
                             buildSystem: BuildSystem,
                             sourceDirectoryPath: "./src",
                             title: "Cake.ProGet",
@@ -26,7 +26,8 @@ BuildParameters.Tasks.CreateNuGetPackagesTask.IsDependentOn("Download-Upack");
 Task("Download-Upack")
 	.Does(() => {
 		DownloadFile(
-			"https://github.com/Inedo/upack/releases/download/upack-2.2.3.9/upack.exe",
+			"https://github.com/Inedo/upack/releases/download/upack-2.2.5.15/upack.exe",
 			BuildParameters.Paths.Directories.Build.GetFilePath("upack.exe"));
 	});
+
 Build.Run();

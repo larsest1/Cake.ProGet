@@ -14,7 +14,7 @@ Task("Create-Package")
     .Description("Creates a universal package")
     .IsDependentOn("Clean")
     .Does(() => {
-        Pack(new UniversalPackagePackSettings(
+        UPackPack(new UniversalPackagePackSettings(
             "./UPack.Example.uspec",
             "./content"
         ));
@@ -26,7 +26,7 @@ Task("Publish-Package")
     .Does(() => {                
         foreach(var item in GetFiles("./*.upack"))
         {
-            Push(new UniversalPackagePushSettings(item.FullPath, ProgetUniversalPackageEndpoint));
+            UPackPush(new UniversalPackagePushSettings(item.FullPath, ProgetUniversalPackageEndpoint));
         }        
     });
 
