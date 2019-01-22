@@ -26,7 +26,7 @@ BuildParameters.Tasks.CreateNuGetPackagesTask.IsDependentOn("Download-Upack");
 Task("Download-Upack")
 	.Does(() => {
 		DownloadFile(
-			"https://github.com/Inedo/upack/releases/download/upack-2.2.3.9/upack.exe",
+			"https://github.com/Inedo/upack/releases/download/upack-2.2.5.15/upack.exe",
 			BuildParameters.Paths.Directories.Build.GetFilePath("upack.exe"));
 	});
 Build.Run();
