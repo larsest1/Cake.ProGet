@@ -46,7 +46,7 @@ A full example [can be found here](https://github.com/cake-contrib/cake.proget/b
 Task("Create-Package")
     .Description("Creates a universal package")
     .Does(() => {
-        Pack(new UniversalPackagePackSettings(
+        UPackPack(new UniversalPackagePackSettings(
             "./UPack.Example.uspec",
             "./content"
         ));
@@ -58,7 +58,7 @@ Task("Publish-Package")
     .Does(() => {                
         foreach(var item in GetFiles("./*.upack"))
         {
-            Push(new UniversalPackagePushSettings(item.FullPath, "http://your-proget-server/upack/packages/"));
+            UPackPush(new UniversalPackagePushSettings(item.FullPath, "http://your-proget-server/upack/packages/"));
         }        
     });
 ```
