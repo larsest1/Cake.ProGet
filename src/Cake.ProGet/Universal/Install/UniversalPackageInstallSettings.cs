@@ -90,6 +90,14 @@ namespace Cake.ProGet.Universal.Install
         public bool Overwrite { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether timestamps of installed files should be preserved as in the package.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if timestamps should be preserved; otherwise, <c>false</c>.
+        /// </value>
+        public bool PreserveTimestamps { get; set; }
+
+        /// <summary>
         /// Gets whether or not credentials are specified
         /// </summary>
         /// <returns>

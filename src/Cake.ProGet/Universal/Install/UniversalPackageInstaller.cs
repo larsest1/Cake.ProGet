@@ -69,6 +69,11 @@ namespace Cake.ProGet.Universal.Install
                 builder.Append("--overwrite");
             }
 
+            if (settings.PreserveTimestamps)
+            {
+                builder.Append("--preserve-timestamps");
+            }
+
             if (settings.HasCredentials())
             {
                 if (!settings.AreCredentialsValid())
