@@ -87,5 +87,15 @@ namespace Cake.ProGet.Tests.Universal.Install
             // Then
             Assert.False(settings.Overwrite);
         }
+
+        [Fact]
+        public void PreserveTimestamps_Should_Be_False_By_Default()
+        {
+            // Given, When
+            var settings = new UniversalPackageInstallSettings("package.id", "http://proget.com/upack/feed", "./folder/test.upack");
+
+            // Then
+            Assert.False(settings.PreserveTimestamps);
+        }
     }
 }

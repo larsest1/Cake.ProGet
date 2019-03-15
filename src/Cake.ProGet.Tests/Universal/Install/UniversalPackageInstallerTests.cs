@@ -163,6 +163,21 @@ namespace Cake.ProGet.Tests.Universal.Install
         }
 
         [Theory]
+        [InlineData(true, "install Test.Package --source=http://proget.com/upack-feed --target=\"/Working/target\" --preserve-timestamps")]
+        [InlineData(false, "install Test.Package --source=http://proget.com/upack-feed --target=\"/Working/target\"")]
+        public void Should_Add_PreserveTimestamps_To_Arguments_If_Set(bool preserveTimestamps, string expected)
+        {
+            // Given
+            var fixture = new UniversalPackageInstallerFixture { Settings = { PreserveTimestamps = preserveTimestamps } };
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal(expected, result.Args);
+        }
+
+        [Theory]
         [InlineData("user", "pass", "install Test.Package --source=http://proget.com/upack-feed --target=\"/Working/target\" --user=user:pass")]
         [InlineData(null, null, "install Test.Package --source=http://proget.com/upack-feed --target=\"/Working/target\"")]
         public void Should_Add_Credentials_To_Arguments_If_Set(string user, string pass, string expected)
