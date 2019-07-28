@@ -15,7 +15,7 @@ BuildParameters.SetParameters(context: Context,
 BuildParameters.PrintParameters(Context);
 
 ToolSettings.SetToolSettings(context: Context,
-                            dupFinderExcludePattern: new string[] { BuildParameters.RootDirectoryPath + "/src/Cake.ProGet.Tests/*.cs" },
+                            dupFinderExcludePattern: new string[] { BuildParameters.RootDirectoryPath + "/src/Cake.ProGet.Tests/*.cs", BuildParameters.RootDirectoryPath + "/src/Cake.ProGet/**/*.AssemblyInfo.cs" },
                             testCoverageFilter: "+[*]* -[xunit.*]* -[Cake.Core]* -[Cake.Testing]* -[*.Tests]* -[FluentAssertions*]* ",
                             testCoverageExcludeByAttribute: "*.ExcludeFromCodeCoverage*",
                             testCoverageExcludeByFile: "*/*Designer.cs;*/*.g.cs;*/*.g.i.cs",
@@ -31,4 +31,4 @@ Task("Download-Upack")
 			BuildParameters.Paths.Directories.Build.GetFilePath("upack.exe"));
 	});
 
-Build.Run();
+Build.RunDotNetCore();
