@@ -7,7 +7,8 @@ BuildParameters.SetParameters(context: Context,
                             sourceDirectoryPath: "./src",
                             title: "Cake.ProGet",
                             repositoryOwner: "cake-contrib",
-                            repositoryName: "Cake.ProGet");
+                            repositoryName: "Cake.ProGet",
+                            shouldRunGitVersion: true);
 
 ((CakeTask)BuildParameters.Tasks.UploadCoverallsReportTask.Task).Actions.Clear();
 
