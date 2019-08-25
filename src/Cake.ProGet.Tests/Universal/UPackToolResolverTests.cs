@@ -95,7 +95,7 @@ namespace Cake.ProGet.Tests.Universal
                 Assert.Equal("/stuff/programs/upack.exe", result.FullPath);
             }
 
-            [Fact]
+            [WindowsFact]
             public void Should_Be_Able_To_Resolve_Path_Via_Environment_Path_Variable_On_Windows()
             {
                 // Given
