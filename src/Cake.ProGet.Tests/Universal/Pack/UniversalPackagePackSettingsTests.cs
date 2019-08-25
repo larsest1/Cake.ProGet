@@ -12,7 +12,7 @@ namespace Cake.ProGet.Tests.Universal.Pack
             {
                 var ex = Record.Exception(() => new UniversalPackagePackSettings(null, "./folder"));
 
-                Assert.IsArgumentNullException(ex, "metadataFilePath");
+                ExtraAssert.IsArgumentNullException(ex, "metadataFilePath");
             }
 
             [Fact]
@@ -20,7 +20,7 @@ namespace Cake.ProGet.Tests.Universal.Pack
             {
                 var ex = Record.Exception(() => new UniversalPackagePackSettings("./path/to/file.uspec", null));
 
-                Assert.IsArgumentNullException(ex, "sourceDirectory");
+                ExtraAssert.IsArgumentNullException(ex, "sourceDirectory");
             }
         }
     }

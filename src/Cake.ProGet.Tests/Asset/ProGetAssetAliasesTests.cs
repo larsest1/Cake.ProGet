@@ -13,8 +13,8 @@ namespace Cake.ProGet.Tests.Asset
             {
                 var result = Record.Exception(() =>
                     ProGetAssetAliases.ProGetPushAsset(null, new FilePath("foo"), "http://foo.com", new ProGetConfiguration()));
-                Assert.IsArgumentNullException(result, "context");
-            }    
+                ExtraAssert.IsArgumentNullException(result, "context");
+            }
         }
 
         public sealed class TheListerAliases
@@ -25,7 +25,7 @@ namespace Cake.ProGet.Tests.Asset
                 var result = Record.Exception(() =>
                         ProGetAssetAliases.ProGetCreateAssetDirectory(null, "http://localhost:9091/content/testdir",
                     new ProGetConfiguration()));
-                Assert.IsArgumentNullException(result, "context");
+                ExtraAssert.IsArgumentNullException(result, "context");
             }
         }
 
@@ -36,8 +36,8 @@ namespace Cake.ProGet.Tests.Asset
             {
                 var result = Record.Exception(() => ProGetAssetAliases.ProGetDownloadAsset(null,
                     "http://localhost:9091/content/testdir/asset.gif", "./out/asset.gif", new ProGetConfiguration()));
-                Assert.IsArgumentNullException(result, "context");
+                ExtraAssert.IsArgumentNullException(result, "context");
             }
-        }        
+        }
     }
 }

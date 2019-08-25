@@ -1,9 +1,12 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using Cake.Core.IO;
 using Cake.ProGet.Asset;
-using HttpMock;
+using WireMock.RequestBuilders;
+using WireMock.ResponseBuilders;
+using WireMock.Server;
 using Xunit;
 using Path = System.IO.Path;
 
@@ -13,8 +16,8 @@ namespace Cake.ProGet.Tests.Asset
     {
         private const string Host = "http://localhost:9191";
         private readonly ProGetConfiguration _config;
-        private readonly IHttpServer _server;
-        
+        private readonly FluentMockServer _server;
+
         public ProGetAssetDownloaderTests()
         {
             _config = new ProGetConfiguration
@@ -23,7 +26,7 @@ namespace Cake.ProGet.Tests.Asset
                 ProGetPassword = "password"
             };
 
-            _server = HttpMockRepository.At(Host).WithNewContext();
+            _server = FluentMockServer.Start();
         }
 
         [Theory]
@@ -31,10 +34,10 @@ namespace Cake.ProGet.Tests.Asset
         public void Should_Download_Asset(string assetUri)
         {
             var tempFile = Path.GetTempFileName();
-            _server.Stub(x => x.Get(assetUri))
-                .ReturnFile(tempFile)
-                .OK();
-            
+
+            _server.Given(Request.Create().WithUrl(assetUri).UsingGet())
+            .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.OK).WithBodyFromFile(tempFile));
+
             var asset = new ProGetAssetDownloader(_config);
             var outputPath = Path.GetRandomFileName();
             asset.GetSingleAsset($"{Host}{assetUri}", outputPath);
@@ -46,30 +49,30 @@ namespace Cake.ProGet.Tests.Asset
         [InlineData("/endpoints/test/content/test.gif")]
         public void Should_Throw_If_Asset_Not_Found(string assetUri)
         {
-            _server.Stub(x => x.Get(assetUri))
-                .NotFound();
-            
+            _server.Given(Request.Create().WithUrl(assetUri).UsingGet())
+            .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.NotFound));
+
             var asset = new ProGetAssetDownloader(_config);
             var result = Record.Exception(() => asset.GetSingleAsset($"{Host}{assetUri}", new FilePath(Path.GetTempPath())));
-            Assert.IsCakeException(result, "The asset was not found.");
+            ExtraAssert.IsCakeException(result, "The asset was not found.");
         }
 
         [Theory]
         [InlineData("/endpoints/test/content/test.gif")]
         public void Should_Throw_If_Unauthorized(string assetUri)
         {
-            _server.Stub(x => x.Get(assetUri))
-                .WithStatus(HttpStatusCode.Unauthorized);
-            
+            _server.Given(Request.Create().WithUrl(assetUri).UsingGet())
+            .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.Unauthorized));
+
             var asset = new ProGetAssetDownloader(_config);
             var result = Record.Exception(() =>
                 asset.GetSingleAsset($"{Host}{assetUri}", new FilePath(Path.GetTempPath())));
-            Assert.IsCakeException(result, "Authorization to ProGet server failed; Credentials were incorrect, or not supplied.");
+            ExtraAssert.IsCakeException(result, "Authorization to ProGet server failed; Credentials were incorrect, or not supplied.");
         }
-        
+
         public void Dispose()
         {
-            _server.Dispose();
+            _server.Stop();
         }
     }
 }

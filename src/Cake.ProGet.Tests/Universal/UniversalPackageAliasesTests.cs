@@ -16,9 +16,9 @@ namespace Cake.ProGet.Tests.Universal
             {
                 // Given, When
                 var result = Record.Exception(() => UniversalPackageAliases.UPackPack(null, new UniversalPackagePackSettings()));
-                
+
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                ExtraAssert.IsArgumentNullException(result, "context");
             }
         }
 
@@ -31,7 +31,7 @@ namespace Cake.ProGet.Tests.Universal
                 var result = Record.Exception(() => UniversalPackageAliases.UPackPush(null, new UniversalPackagePushSettings()));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                ExtraAssert.IsArgumentNullException(result, "context");
             }
         }
 
@@ -44,7 +44,7 @@ namespace Cake.ProGet.Tests.Universal
                 var result = Record.Exception(() => UniversalPackageAliases.UPackInstall(null, new UniversalPackageInstallSettings()));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                ExtraAssert.IsArgumentNullException(result, "context");
             }
         }
 
@@ -57,7 +57,7 @@ namespace Cake.ProGet.Tests.Universal
                 var result = Record.Exception(() => UniversalPackageAliases.UPackUnpack(null, new UniversalPackageUnpackSettings()));
 
                 // Then
-                Assert.IsArgumentNullException(result, "context");
+                ExtraAssert.IsArgumentNullException(result, "context");
             }
         }
     }

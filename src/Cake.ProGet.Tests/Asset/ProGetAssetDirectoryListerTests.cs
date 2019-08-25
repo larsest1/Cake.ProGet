@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
 using Cake.ProGet.Asset;
-using HttpMock;
+using WireMock.RequestBuilders;
+using WireMock.ResponseBuilders;
+using WireMock.Server;
 using Xunit;
 
 namespace Cake.ProGet.Tests.Asset
@@ -10,7 +14,7 @@ namespace Cake.ProGet.Tests.Asset
     {
         private const string Host = "http://localhost:9191";
         private readonly ProGetConfiguration _config;
-        private readonly IHttpServer _server;
+        private readonly FluentMockServer _server;
 
         public ProGetAssetDirectoryListerTests()
         {
@@ -20,7 +24,7 @@ namespace Cake.ProGet.Tests.Asset
                 ProGetPassword = "password"
             };
 
-            _server = HttpMockRepository.At(Host).WithNewContext();
+            _server = FluentMockServer.Start();
         }
 
         [Theory]
@@ -44,12 +48,10 @@ namespace Cake.ProGet.Tests.Asset
                 ""modified"": ""2017-10-31T21:59:20.81Z""
             }
             ]";
-            
-            _server.Stub(x => x.Get($"{assetDirectoryUri}"))
-                .WithParams(new Dictionary<string, string>{{"recursive", "true"}})
-                .Return(jsonList)
-                .OK();
-            
+
+            _server.Given(Request.Create().WithUrl(assetDirectoryUri).UsingGet())
+            .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.OK).WithBodyAsJson(jsonList));
+
             var asset = new ProGetAssetDirectoryLister(_config);
             var result = asset.ListDirectory($"{Host}{assetDirectoryUri}", true);
             Assert.Equal(2, result.Count);
@@ -67,12 +69,10 @@ namespace Cake.ProGet.Tests.Asset
                 ""modified"": ""2017-10-25T20:22:48.503Z""
             }
             ]";
-            
-            _server.Stub(x => x.Get(assetDirectoryUri))
-                .WithParams(new Dictionary<string, string>{{"recursive", "false"}})
-                .Return(jsonList)
-                .OK();
-            
+
+            _server.Given(Request.Create().WithUrl(assetDirectoryUri).UsingGet())
+            .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.OK).WithBodyAsJson(jsonList));
+
             var asset = new ProGetAssetDirectoryLister(_config);
             var result = asset.ListDirectory($"{Host}{assetDirectoryUri}");
             Assert.Single(result);
@@ -80,7 +80,7 @@ namespace Cake.ProGet.Tests.Asset
 
         public void Dispose()
         {
-            _server.Dispose();
+            _server.Stop();
         }
     }
 }

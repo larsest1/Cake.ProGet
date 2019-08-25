@@ -13,7 +13,7 @@ namespace Cake.ProGet.Tests.Universal.Push
             {
                 var ex = Record.Exception(() => new UniversalPackagePushSettings(null, "./folder"));
 
-                Assert.IsArgumentNullException(ex, "packageFilePath");
+                ExtraAssert.IsArgumentNullException(ex, "packageFilePath");
             }
 
             [Fact]
@@ -21,7 +21,7 @@ namespace Cake.ProGet.Tests.Universal.Push
             {
                 var ex = Record.Exception(() => new UniversalPackagePushSettings("./path/to/file.upack", null));
 
-                Assert.IsArgumentException(ex, "target", "Value cannot be null or empty.");
+                ExtraAssert.IsArgumentException(ex, "target", "Value cannot be null or empty.");
             }
         }
 
@@ -50,6 +50,6 @@ namespace Cake.ProGet.Tests.Universal.Push
                 settings.AreCredentialsValid().Should().Be(expected);
             }
         }
-        
+
     }
 }

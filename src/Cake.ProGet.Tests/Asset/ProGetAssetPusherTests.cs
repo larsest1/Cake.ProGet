@@ -1,10 +1,13 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using Cake.Core.IO;
 using Cake.ProGet.Asset;
 using Cake.Testing;
-using HttpMock;
+using WireMock.RequestBuilders;
+using WireMock.ResponseBuilders;
+using WireMock.Server;
 using Xunit;
 using Path = System.IO.Path;
 
@@ -15,8 +18,8 @@ namespace Cake.ProGet.Tests.Asset
         private const string Host = "http://localhost:9191";
         private readonly ProGetConfiguration _config;
         private readonly FakeLog _log;
-        private readonly IHttpServer _server;
-        
+        private readonly FluentMockServer _server;
+
         public ProGetAssetPusherTests()
         {
             _config = new ProGetConfiguration
@@ -24,18 +27,18 @@ namespace Cake.ProGet.Tests.Asset
                 ProGetUser = "testuser",
                 ProGetPassword = "password"
             };
-            
+
             _log = new FakeLog();
-            _server = HttpMockRepository.At(Host).WithNewContext();
+            _server = FluentMockServer.Start();
         }
-        
+
         [Theory]
         [InlineData("/endpoints/test/content/test.gif")]
         public void Should_Report_True_If_Asset_Exists(string assetUri)
         {
-            _server.Stub(x => x.Head(assetUri))
-                .OK();
-            
+            _server.Given(Request.Create().WithUrl(assetUri).UsingHead())
+            .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.OK));
+
             var asset = new ProGetAssetPusher(_log, _config );
             var result = asset.DoesAssetExist($"{Host}{assetUri}");
             Assert.True(result);
@@ -45,9 +48,9 @@ namespace Cake.ProGet.Tests.Asset
         [InlineData("/endpoints/test/content/test.gif")]
         public void Should_Report_False_If_Asset_Does_Not_Exist(string assetUri)
         {
-            _server.Stub(x => x.Head(assetUri))
-                .NotFound();
-            
+            _server.Given(Request.Create().WithUrl(assetUri).UsingHead())
+            .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.NotFound));
+
             var asset = new ProGetAssetPusher(_log, _config );
             var result = asset.DoesAssetExist($"{Host}{assetUri}");
             Assert.False(result);
@@ -57,21 +60,21 @@ namespace Cake.ProGet.Tests.Asset
         [InlineData("/endpoints/test/content/test.gif")]
         public void Should_Fail_Existence_Check_If_Creds_Are_Invalid(string assetUri)
         {
-            _server.Stub(x => x.Head(assetUri))
-                .WithStatus(HttpStatusCode.Unauthorized);
-            
+            _server.Given(Request.Create().WithUrl(assetUri).UsingHead())
+            .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.Unauthorized));
+
             var asset = new ProGetAssetPusher(_log, _config);
             var result = Record.Exception(() => asset.DoesAssetExist($"{Host}{assetUri}"));
-            Assert.IsCakeException(result, "Authorization to ProGet server failed; Credentials were incorrect, or not supplied.");
+            ExtraAssert.IsCakeException(result, "Authorization to ProGet server failed; Credentials were incorrect, or not supplied.");
         }
 
         [Theory]
         [InlineData("/endpoints/test/content/test.gif")]
         public void Should_Delete_Asset(string assetUri)
         {
-            _server.Stub(x => x.Delete(assetUri))
-                .OK();
-            
+            _server.Given(Request.Create().WithUrl(assetUri).UsingDelete())
+            .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.OK));
+
             var asset = new ProGetAssetPusher(_log, _config);
             var result = asset.DeleteAsset($"{Host}{assetUri}");
             Assert.True(result);
@@ -81,21 +84,21 @@ namespace Cake.ProGet.Tests.Asset
         [InlineData("/endpoints/test/content/test.gif")]
         public void Should_Fail_Delete_If_Creds_Are_Invalid(string assetUri)
         {
-            _server.Stub(x => x.Delete(assetUri))
-                .WithStatus(HttpStatusCode.Unauthorized);
-            
+            _server.Given(Request.Create().WithUrl(assetUri).UsingDelete())
+            .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.Unauthorized));
+
             var asset = new ProGetAssetPusher(_log, _config);
             var result = Record.Exception(() => asset.DeleteAsset($"{Host}{assetUri}"));
-            Assert.IsCakeException(result, "Authorization to ProGet server failed; Credentials were incorrect, or not supplied.");
+            ExtraAssert.IsCakeException(result, "Authorization to ProGet server failed; Credentials were incorrect, or not supplied.");
         }
 
         [Theory]
         [InlineData("/endpoints/test/content/test.gif")]
         public void Should_Push_New_Asset_With_Put_Under_5MB(string assetUri)
         {
-            _server.Stub(x => x.Put(assetUri))
-                .OK();
-            
+            _server.Given(Request.Create().WithUrl(assetUri).UsingPut())
+            .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.OK));
+
             var asset = new ProGetAssetPusher(_log, _config);
             var tempFile = new FilePath($"{Path.GetTempPath()}{Path.GetRandomFileName()}");
             using (var fileStream = new FileStream(tempFile.FullPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
@@ -111,9 +114,9 @@ namespace Cake.ProGet.Tests.Asset
         [InlineData("/endpoints/test/content/test.gif")]
         public void Should_Push_New_Asset_With_Multipart_Post_Over_5MB(string assetUri)
         {
-            _server.Stub(x => x.Post(assetUri))
-                .OK();
-            
+            _server.Given(Request.Create().WithUrl(assetUri).UsingPost())
+            .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.OK));
+
             var asset = new ProGetAssetPusher(_log, _config);
             var tempFile = new FilePath($"{Path.GetTempPath()}{Path.GetRandomFileName()}");
             using (var fileStream = new FileStream(tempFile.FullPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
@@ -124,14 +127,14 @@ namespace Cake.ProGet.Tests.Asset
             File.Delete(tempFile.FullPath);
             Assert.Null(result);
         }
-        
+
         [Theory]
         [InlineData("/endpoints/test/content/test.gif")]
         public void Should_Throw_Exception_When_Asset_Push_Fails_As_Put(string assetUri)
         {
-            _server.Stub(x => x.Put(assetUri))
-                .WithStatus(HttpStatusCode.BadRequest);
-            
+            _server.Given(Request.Create().WithUrl(assetUri).UsingPut())
+            .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.BadRequest));
+
             var asset = new ProGetAssetPusher(_log, _config);
             var tempFile = new FilePath($"{Path.GetTempPath()}{Path.GetRandomFileName()}");
             using (var fileStream = new FileStream(tempFile.FullPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
@@ -140,12 +143,12 @@ namespace Cake.ProGet.Tests.Asset
             }
             var result = Record.Exception(() => asset.Publish(tempFile, $"{Host}{assetUri}"));
             File.Delete(tempFile.FullPath);
-            Assert.IsCakeException(result, "Upload failed. This request would have overwritten an existing package.");
+            ExtraAssert.IsCakeException(result, "Upload failed. This request would have overwritten an existing package.");
         }
 
         public void Dispose()
         {
-            _server.Dispose();
+            _server.Stop();
         }
     }
 }

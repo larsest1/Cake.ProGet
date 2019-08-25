@@ -34,7 +34,7 @@ namespace Cake.ProGet.Tests.Universal.Pack
             var result = Record.Exception(() => fixture.Run());
 
             // Then
-            Assert.IsCakeException(result, "UPack: Could not locate executable.");
+            ExtraAssert.IsCakeException(result, "UPack: Could not locate executable.");
         }
 
         [Fact]
@@ -48,7 +48,7 @@ namespace Cake.ProGet.Tests.Universal.Pack
             var result = Record.Exception(() => fixture.Run());
 
             // Then
-            Assert.IsCakeException(result, "UPack: Process was not started.");
+            ExtraAssert.IsCakeException(result, "UPack: Process was not started.");
         }
 
         [Fact]
@@ -62,7 +62,7 @@ namespace Cake.ProGet.Tests.Universal.Pack
             var result = Record.Exception(() => fixture.Run());
 
             // Then
-            Assert.IsCakeException(result, "UPack: Process returned an error (exit code 1).");
+            ExtraAssert.IsCakeException(result, "UPack: Process returned an error (exit code 1).");
         }
 
         [Fact]
@@ -75,7 +75,7 @@ namespace Cake.ProGet.Tests.Universal.Pack
             var result = Record.Exception(() => fixture.Run());
 
             // Then
-            Assert.IsArgumentNullException(result, "settings");
+            ExtraAssert.IsArgumentNullException(result, "settings");
         }
 
         [Fact]
@@ -88,7 +88,7 @@ namespace Cake.ProGet.Tests.Universal.Pack
             var result = Record.Exception(() => fixture.Run());
 
             // Then
-            Assert.IsCakeException(result, "Required setting MetadataFilePath not specified.");
+            ExtraAssert.IsCakeException(result, "Required setting MetadataFilePath not specified.");
         }
 
         [Fact]
@@ -101,7 +101,7 @@ namespace Cake.ProGet.Tests.Universal.Pack
             var result = Record.Exception(() => fixture.Run());
 
             // Then
-            Assert.IsCakeException(result, "Required setting SourceDirectory not specified.");
+            ExtraAssert.IsCakeException(result, "Required setting SourceDirectory not specified.");
         }
 
         [Fact]
@@ -114,7 +114,7 @@ namespace Cake.ProGet.Tests.Universal.Pack
             var result = Record.Exception(() => fixture.Run());
 
             // Then
-            Assert.IsCakeExceptionWithMessage(result, s => s.StartsWith("Metadata file does not exist at"));
+            ExtraAssert.IsCakeExceptionWithMessage(result, s => s.StartsWith("Metadata file does not exist at"));
         }
 
         [Fact]
@@ -127,7 +127,7 @@ namespace Cake.ProGet.Tests.Universal.Pack
             var result = Record.Exception(() => fixture.Run());
 
             // Then
-            Assert.IsCakeExceptionWithMessage(result, s => s.StartsWith("Source directory does not exist at"));
+            ExtraAssert.IsCakeExceptionWithMessage(result, s => s.StartsWith("Source directory does not exist at"));
         }
 
         [Fact]
@@ -147,7 +147,7 @@ namespace Cake.ProGet.Tests.Universal.Pack
             // Then
             Assert.Contains("/Working/target-directory", result.Args);
         }
-        
+
         [Fact]
         public void Should_Not_Add_TargetDirectory_To_Arguments_If_Null()
         {
