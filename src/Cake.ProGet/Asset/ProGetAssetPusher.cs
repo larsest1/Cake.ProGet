@@ -11,7 +11,7 @@ namespace Cake.ProGet.Asset
     /// <summary>
     /// Manipulates files in ProGet Asset Directories.
     /// </summary>
-    internal sealed class ProGetAssetPusher
+    public sealed class ProGetAssetPusher
     {
         private readonly ICakeLog _log;
         private readonly ProGetConfiguration _configuration;

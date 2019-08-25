@@ -10,7 +10,7 @@ namespace Cake.ProGet.Asset
     /// <summary>
     /// Downloads assets from ProGet Asset Directories.
     /// </summary>
-    internal sealed class ProGetAssetDownloader
+    public sealed class ProGetAssetDownloader
     {
         private readonly ProGetConfiguration _configuration;
 
@@ -30,7 +30,7 @@ namespace Cake.ProGet.Asset
             _configuration.Apply(client);
 
             var response = client.GetAsync(assetUri).Result;
-            
+
             if (response.StatusCode.Equals(HttpStatusCode.Unauthorized) ||
                 response.StatusCode.Equals(HttpStatusCode.Forbidden))
             {
@@ -41,7 +41,7 @@ namespace Cake.ProGet.Asset
             {
                 throw new CakeException("The asset was not found.");
             }
-                                    
+
             using (var streamToReadFrom = response.Content.ReadAsStreamAsync().Result)
             using (var file = new FileStream(outputPath.FullPath, FileMode.CreateNew, FileAccess.Write))
             {
@@ -53,9 +53,9 @@ namespace Cake.ProGet.Asset
         {
             var client = new HttpClient();
             _configuration.Apply(client);
-            
+
             var response = client.GetAsync($"{assetDirectoryUri}?format=zip&recursive=true").Result;
-            
+
             if (response.StatusCode.Equals(HttpStatusCode.Unauthorized) ||
                 response.StatusCode.Equals(HttpStatusCode.Forbidden))
             {
@@ -65,7 +65,7 @@ namespace Cake.ProGet.Asset
             {
                 throw new CakeException("The asset was not found.");
             }
-            
+
             using (var streamToReadFrom = response.Content.ReadAsStreamAsync().Result)
             using (var file = new FileStream(outputPath.FullPath, FileMode.CreateNew, FileAccess.Write))
             {

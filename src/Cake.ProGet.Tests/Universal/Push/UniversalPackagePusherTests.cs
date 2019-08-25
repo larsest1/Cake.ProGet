@@ -17,7 +17,7 @@ namespace Cake.ProGet.Tests.Universal.Push
             var result = Record.Exception(() => fixture.Run());
 
             // Then
-            Assert.IsArgumentNullException(result, "resolver");
+            ExtraAssert.IsArgumentNullException(result, "resolver");
         }
 
         [Theory]
@@ -47,7 +47,7 @@ namespace Cake.ProGet.Tests.Universal.Push
             var result = Record.Exception(() => fixture.Run());
 
             // Then
-            Assert.IsCakeException(result, "UPack: Could not locate executable.");
+            ExtraAssert.IsCakeException(result, "UPack: Could not locate executable.");
         }
 
         [Fact]
@@ -61,7 +61,7 @@ namespace Cake.ProGet.Tests.Universal.Push
             var result = Record.Exception(() => fixture.Run());
 
             // Then
-            Assert.IsCakeException(result, "UPack: Process was not started.");
+            ExtraAssert.IsCakeException(result, "UPack: Process was not started.");
         }
 
         [Fact]
@@ -75,7 +75,7 @@ namespace Cake.ProGet.Tests.Universal.Push
             var result = Record.Exception(() => fixture.Run());
 
             // Then
-            Assert.IsCakeException(result, "UPack: Process returned an error (exit code 1).");
+            ExtraAssert.IsCakeException(result, "UPack: Process returned an error (exit code 1).");
         }
 
         [Fact]
@@ -88,7 +88,7 @@ namespace Cake.ProGet.Tests.Universal.Push
             var result = Record.Exception(() => fixture.Run());
 
             // Then
-            Assert.IsArgumentNullException(result, "settings");
+            ExtraAssert.IsArgumentNullException(result, "settings");
         }
 
         [Fact]
@@ -101,7 +101,7 @@ namespace Cake.ProGet.Tests.Universal.Push
             var result = Record.Exception(() => fixture.Run());
 
             // Then
-            Assert.IsCakeException(result, "Required setting Package not specified.");
+            ExtraAssert.IsCakeException(result, "Required setting Package not specified.");
         }
 
         [Fact]
@@ -114,7 +114,7 @@ namespace Cake.ProGet.Tests.Universal.Push
             var result = Record.Exception(() => fixture.Run());
 
             // Then
-            Assert.IsCakeException(result, "Required setting Target not specified.");
+            ExtraAssert.IsCakeException(result, "Required setting Target not specified.");
         }
 
         [Fact]
@@ -127,7 +127,7 @@ namespace Cake.ProGet.Tests.Universal.Push
             var result = Record.Exception(() => fixture.Run());
 
             // Then
-            Assert.IsCakeExceptionWithMessage(result, s => s.StartsWith("Universal package file does not exist at"));
+            ExtraAssert.IsCakeExceptionWithMessage(result, s => s.StartsWith("Universal package file does not exist at"));
         }
 
         [Fact]
@@ -140,7 +140,7 @@ namespace Cake.ProGet.Tests.Universal.Push
             var result = Record.Exception(() => fixture.Run());
 
             // Then
-            Assert.IsCakeException(result, "Both username and password must be specified for authentication");
+            ExtraAssert.IsCakeException(result, "Both username and password must be specified for authentication");
         }
 
         [Theory]

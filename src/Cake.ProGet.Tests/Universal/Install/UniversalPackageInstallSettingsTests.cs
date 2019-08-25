@@ -15,7 +15,7 @@ namespace Cake.ProGet.Tests.Universal.Install
             {
                 var ex = Record.Exception(() => new UniversalPackageInstallSettings(package, "http://proget.com/upack/feed", "./folder"));
 
-                Assert.IsArgumentException(ex, "package", "Value cannot be null or empty.");
+                ExtraAssert.IsArgumentException(ex, "package", "Value cannot be null or empty.");
             }
 
             [Theory]
@@ -25,7 +25,7 @@ namespace Cake.ProGet.Tests.Universal.Install
             {
                 var ex = Record.Exception(() => new UniversalPackageInstallSettings("Test.Package", source, "./folder"));
 
-                Assert.IsArgumentException(ex, "source", "Value cannot be null or empty.");
+                ExtraAssert.IsArgumentException(ex, "source", "Value cannot be null or empty.");
             }
 
             [Fact]
@@ -33,7 +33,7 @@ namespace Cake.ProGet.Tests.Universal.Install
             {
                 var ex = Record.Exception(() => new UniversalPackageInstallSettings("Test.Package", "http://proget.com/upack/feed", null));
 
-                Assert.IsArgumentNullException(ex, "targetDirectory");
+                ExtraAssert.IsArgumentNullException(ex, "targetDirectory");
             }
         }
 

@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Net;
 using Cake.ProGet.Asset;
-using HttpMock;
+using WireMock.RequestBuilders;
+using WireMock.ResponseBuilders;
+using WireMock.Server;
 using Xunit;
 
 namespace Cake.ProGet.Tests.Asset
 {
-    public sealed class ProGetAssetDirectoryListerTests : IDisposable
+    public sealed class ProGetAssetDirectoryListerTests
     {
-        private const string Host = "http://localhost:9191";
         private readonly ProGetConfiguration _config;
-        private readonly IHttpServer _server;
 
         public ProGetAssetDirectoryListerTests()
         {
@@ -19,8 +18,6 @@ namespace Cake.ProGet.Tests.Asset
                 ProGetUser = "testuser",
                 ProGetPassword = "password"
             };
-
-            _server = HttpMockRepository.At(Host).WithNewContext();
         }
 
         [Theory]
@@ -44,15 +41,15 @@ namespace Cake.ProGet.Tests.Asset
                 ""modified"": ""2017-10-31T21:59:20.81Z""
             }
             ]";
-            
-            _server.Stub(x => x.Get($"{assetDirectoryUri}"))
-                .WithParams(new Dictionary<string, string>{{"recursive", "true"}})
-                .Return(jsonList)
-                .OK();
-            
-            var asset = new ProGetAssetDirectoryLister(_config);
-            var result = asset.ListDirectory($"{Host}{assetDirectoryUri}", true);
-            Assert.Equal(2, result.Count);
+
+            using(var server = FluentMockServer.Start())
+            {
+                server.Given(Request.Create().WithPath(assetDirectoryUri).UsingGet())
+                .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.OK).WithBody(jsonList));
+                var asset = new ProGetAssetDirectoryLister(_config);
+                var result = asset.ListDirectory($"http://localhost:{server.Ports[0]}{assetDirectoryUri}", true);
+                Assert.Equal(2, result.Count);
+            }
         }
 
         [Theory]
@@ -67,20 +64,16 @@ namespace Cake.ProGet.Tests.Asset
                 ""modified"": ""2017-10-25T20:22:48.503Z""
             }
             ]";
-            
-            _server.Stub(x => x.Get(assetDirectoryUri))
-                .WithParams(new Dictionary<string, string>{{"recursive", "false"}})
-                .Return(jsonList)
-                .OK();
-            
-            var asset = new ProGetAssetDirectoryLister(_config);
-            var result = asset.ListDirectory($"{Host}{assetDirectoryUri}");
-            Assert.Single(result);
-        }
 
-        public void Dispose()
-        {
-            _server.Dispose();
+            using(var server = FluentMockServer.Start())
+            {
+                server.Given(Request.Create().WithPath(assetDirectoryUri).UsingGet())
+                .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.OK).WithBody(jsonList));
+
+                var asset = new ProGetAssetDirectoryLister(_config);
+                var result = asset.ListDirectory($"http://localhost:{server.Ports[0]}{assetDirectoryUri}");
+                Assert.Single(result);
+            }
         }
     }
 }

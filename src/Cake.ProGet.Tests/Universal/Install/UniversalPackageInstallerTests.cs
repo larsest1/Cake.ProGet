@@ -34,7 +34,7 @@ namespace Cake.ProGet.Tests.Universal.Install
             var result = Record.Exception(() => fixture.Run());
 
             // Then
-            Assert.IsCakeException(result, "UPack: Could not locate executable.");
+            ExtraAssert.IsCakeException(result, "UPack: Could not locate executable.");
         }
 
         [Fact]
@@ -48,7 +48,7 @@ namespace Cake.ProGet.Tests.Universal.Install
             var result = Record.Exception(() => fixture.Run());
 
             // Then
-            Assert.IsCakeException(result, "UPack: Process was not started.");
+            ExtraAssert.IsCakeException(result, "UPack: Process was not started.");
         }
 
         [Fact]
@@ -62,7 +62,7 @@ namespace Cake.ProGet.Tests.Universal.Install
             var result = Record.Exception(() => fixture.Run());
 
             // Then
-            Assert.IsCakeException(result, "UPack: Process returned an error (exit code 1).");
+            ExtraAssert.IsCakeException(result, "UPack: Process returned an error (exit code 1).");
         }
 
         [Fact]
@@ -75,7 +75,7 @@ namespace Cake.ProGet.Tests.Universal.Install
             var result = Record.Exception(() => fixture.Run());
 
             // Then
-            Assert.IsArgumentNullException(result, "settings");
+            ExtraAssert.IsArgumentNullException(result, "settings");
         }
 
         [Fact]
@@ -88,7 +88,7 @@ namespace Cake.ProGet.Tests.Universal.Install
             var result = Record.Exception(() => fixture.Run());
 
             // Then
-            Assert.IsCakeException(result, "Required setting Package not specified.");
+            ExtraAssert.IsCakeException(result, "Required setting Package not specified.");
         }
 
         [Theory]
@@ -103,7 +103,7 @@ namespace Cake.ProGet.Tests.Universal.Install
             var result = Record.Exception(() => fixture.Run());
 
             // Then
-            Assert.IsCakeException(result, "Required setting Source not specified.");
+            ExtraAssert.IsCakeException(result, "Required setting Source not specified.");
         }
 
         [Fact]
@@ -116,7 +116,7 @@ namespace Cake.ProGet.Tests.Universal.Install
             var result = Record.Exception(() => fixture.Run());
 
             // Then
-            Assert.IsCakeException(result, "Required setting TargetDirectory not specified.");
+            ExtraAssert.IsCakeException(result, "Required setting TargetDirectory not specified.");
         }
 
         [Fact]
@@ -129,7 +129,7 @@ namespace Cake.ProGet.Tests.Universal.Install
             var result = Record.Exception(() => fixture.Run());
 
             // Then
-            Assert.IsCakeException(result, "Both username and password must be specified for authentication");
+            ExtraAssert.IsCakeException(result, "Both username and password must be specified for authentication");
         }
 
         [Theory]

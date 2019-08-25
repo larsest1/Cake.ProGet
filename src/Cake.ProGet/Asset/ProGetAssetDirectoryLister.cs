@@ -10,7 +10,7 @@ namespace Cake.ProGet.Asset
     /// <summary>
     /// Provides methods to list or create asset directories in ProGet.
     /// </summary>
-    internal sealed class ProGetAssetDirectoryLister
+    public sealed class ProGetAssetDirectoryLister
     {
         private readonly ProGetConfiguration _configuration;
 
@@ -33,7 +33,7 @@ namespace Cake.ProGet.Asset
         {
             var client = new HttpClient();
             _configuration.Apply(client);
-            
+
             var result = client.SendAsync(new HttpRequestMessage(HttpMethod.Post, directoryUri)).Result;
 
             if (result.StatusCode.Equals(HttpStatusCode.Unauthorized) || result.StatusCode.Equals(HttpStatusCode.Forbidden))
@@ -56,7 +56,7 @@ namespace Cake.ProGet.Asset
 
             var result = client
                 .SendAsync(new HttpRequestMessage(HttpMethod.Get, $"{directoryUri}?recursive={recursive.ToString().ToLower()}")).Result;
-            
+
             if (result.StatusCode.Equals(HttpStatusCode.Unauthorized) || result.StatusCode.Equals(HttpStatusCode.Forbidden))
             {
                 throw new CakeException("Authorization to ProGet server failed; Credentials were incorrect, or not supplied.");

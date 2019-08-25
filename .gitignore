@@ -91,3 +91,5 @@ BuildArtifacts/
 examples/*/tools/
 examples/*/*.upack
 examples/*/*.zip
+
+.DS_Store
