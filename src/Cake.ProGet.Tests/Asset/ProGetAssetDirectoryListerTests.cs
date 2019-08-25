@@ -10,11 +10,9 @@ using Xunit;
 
 namespace Cake.ProGet.Tests.Asset
 {
-    public sealed class ProGetAssetDirectoryListerTests : IDisposable
+    public sealed class ProGetAssetDirectoryListerTests
     {
-        private const string Host = "http://localhost:9191";
         private readonly ProGetConfiguration _config;
-        private readonly FluentMockServer _server;
 
         public ProGetAssetDirectoryListerTests()
         {
@@ -23,8 +21,6 @@ namespace Cake.ProGet.Tests.Asset
                 ProGetUser = "testuser",
                 ProGetPassword = "password"
             };
-
-            _server = FluentMockServer.Start(9191, false);
         }
 
         [Theory]
@@ -49,12 +45,14 @@ namespace Cake.ProGet.Tests.Asset
             }
             ]";
 
-            _server.Given(Request.Create().WithUrl(assetDirectoryUri).UsingGet())
-            .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.OK).WithBodyAsJson(jsonList));
-
-            var asset = new ProGetAssetDirectoryLister(_config);
-            var result = asset.ListDirectory($"{Host}{assetDirectoryUri}", true);
-            Assert.Equal(2, result.Count);
+            using(var server = FluentMockServer.Start())
+            {
+                server.Given(Request.Create().WithPath(assetDirectoryUri).UsingGet())
+                .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.OK).WithBodyAsJson(jsonList));
+                var asset = new ProGetAssetDirectoryLister(_config);
+                var result = asset.ListDirectory($"http://localhost:{server.Ports[0]}{assetDirectoryUri}", true);
+                Assert.Equal(2, result.Count);
+            }
         }
 
         [Theory]
@@ -70,17 +68,15 @@ namespace Cake.ProGet.Tests.Asset
             }
             ]";
 
-            _server.Given(Request.Create().WithUrl(assetDirectoryUri).UsingGet())
-            .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.OK).WithBodyAsJson(jsonList));
+            using(var server = FluentMockServer.Start())
+            {
+                server.Given(Request.Create().WithPath(assetDirectoryUri).UsingGet())
+                .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.OK).WithBodyAsJson(jsonList));
 
-            var asset = new ProGetAssetDirectoryLister(_config);
-            var result = asset.ListDirectory($"{Host}{assetDirectoryUri}");
-            Assert.Single(result);
-        }
-
-        public void Dispose()
-        {
-            _server.Stop();
+                var asset = new ProGetAssetDirectoryLister(_config);
+                var result = asset.ListDirectory($"http://localhost:{server.Ports[0]}{assetDirectoryUri}");
+                Assert.Single(result);
+            }
         }
     }
 }
