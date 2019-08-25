@@ -24,7 +24,7 @@ namespace Cake.ProGet.Tests.Asset
                 ProGetPassword = "password"
             };
 
-            _server = FluentMockServer.Start();
+            _server = FluentMockServer.Start(9191, false);
         }
 
         [Theory]

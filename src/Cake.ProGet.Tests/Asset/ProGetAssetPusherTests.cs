@@ -29,7 +29,7 @@ namespace Cake.ProGet.Tests.Asset
             };
 
             _log = new FakeLog();
-            _server = FluentMockServer.Start();
+            _server = FluentMockServer.Start(9191, false);
         }
 
         [Theory]
