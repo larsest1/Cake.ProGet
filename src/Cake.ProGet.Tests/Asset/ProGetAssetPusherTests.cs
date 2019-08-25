@@ -1,7 +1,5 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Net;
-using System.Net.Http;
 using Cake.Core.IO;
 using Cake.ProGet.Asset;
 using Cake.Testing;
@@ -114,13 +112,19 @@ namespace Cake.ProGet.Tests.Asset
                 .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.OK));
 
                 var asset = new ProGetAssetPusher(_log, _config);
-                var tempFile = new FilePath($"{Path.GetTempPath()}{Path.GetRandomFileName()}");
+                var tempFile = new FilePath($"{Path.GetTempPath()}Should_Push_New_Asset_With_Put_Under_5MB");
+
+                if (File.Exists(tempFile.FullPath))
+                {
+                    File.Delete(tempFile.FullPath);
+                }
+
                 using (var fileStream = new FileStream(tempFile.FullPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
                 {
                     fileStream.SetLength(4194304);
                 }
                 var result = Record.Exception(() => asset.Publish(tempFile, $"http://localhost:{server.Ports[0]}{assetUri}"));
-                File.Delete(tempFile.FullPath);
+
                 Assert.Null(result);
             }
         }
@@ -156,13 +160,19 @@ namespace Cake.ProGet.Tests.Asset
                 .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.BadRequest));
 
                 var asset = new ProGetAssetPusher(_log, _config);
-                var tempFile = new FilePath($"{Path.GetTempPath()}{Path.GetRandomFileName()}");
+                var tempFile = new FilePath($"{Path.GetTempPath()}Should_Throw_Exception_When_Asset_Push_Fails_As_Put.txt");
+
+                if (File.Exists(tempFile.FullPath))
+                {
+                    File.Delete(tempFile.FullPath);
+                }
+
                 using (var fileStream = new FileStream(tempFile.FullPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
                 {
                     fileStream.SetLength(4194304);
                 }
                 var result = Record.Exception(() => asset.Publish(tempFile, $"http://localhost:{server.Ports[0]}{assetUri}"));
-                File.Delete(tempFile.FullPath);
+
                 ExtraAssert.IsCakeException(result, "Upload failed. This request would have overwritten an existing package.");
             }
         }

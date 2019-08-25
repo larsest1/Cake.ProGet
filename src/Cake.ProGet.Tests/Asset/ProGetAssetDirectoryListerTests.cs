@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
+﻿using System.Net;
 using Cake.ProGet.Asset;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
@@ -48,7 +45,7 @@ namespace Cake.ProGet.Tests.Asset
             using(var server = FluentMockServer.Start())
             {
                 server.Given(Request.Create().WithPath(assetDirectoryUri).UsingGet())
-                .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.OK).WithBodyAsJson(jsonList));
+                .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.OK).WithBody(jsonList));
                 var asset = new ProGetAssetDirectoryLister(_config);
                 var result = asset.ListDirectory($"http://localhost:{server.Ports[0]}{assetDirectoryUri}", true);
                 Assert.Equal(2, result.Count);
@@ -71,7 +68,7 @@ namespace Cake.ProGet.Tests.Asset
             using(var server = FluentMockServer.Start())
             {
                 server.Given(Request.Create().WithPath(assetDirectoryUri).UsingGet())
-                .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.OK).WithBodyAsJson(jsonList));
+                .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.OK).WithBody(jsonList));
 
                 var asset = new ProGetAssetDirectoryLister(_config);
                 var result = asset.ListDirectory($"http://localhost:{server.Ports[0]}{assetDirectoryUri}");
