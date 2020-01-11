@@ -10,7 +10,7 @@ namespace Cake.ProGet.Asset
     /// <summary>
     /// Aliases for ProGet Asset Directory operations.
     /// </summary>
-    [CakeAliasCategory("ProGetAsset")]
+    [CakeAliasCategory("ProGet")]
     public static class ProGetAssetAliases
     {
         /// <summary>
@@ -22,7 +22,7 @@ namespace Cake.ProGet.Asset
         /// <param name="config">An IProGetConfiguration with the username and password.</param>
         /// <exception cref="ArgumentNullException">Thrown if context is null.</exception>
         [CakeMethodAlias]
-        [CakeAliasCategory("ProGetAsset")]
+        [CakeAliasCategory("Asset")]
         public static void ProGetPushAsset(this ICakeContext context, FilePath assetPath, string assetUri, ProGetConfiguration config)
         {
             if (context == null)
@@ -48,19 +48,19 @@ namespace Cake.ProGet.Asset
         /// <returns>True if the asset exists, false otherwise.</returns>
         /// <exception cref="ArgumentNullException">Thrown if context is null.</exception>
         [CakeMethodAlias]
-        [CakeAliasCategory("ProGetAsset")]
+        [CakeAliasCategory("Asset")]
         public static bool ProGetDoesAssetExist(this ICakeContext context, string assetUri, ProGetConfiguration config)
         {
             if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
-            
+
             if (config == null)
             {
                 throw new ArgumentNullException(nameof(config));
             }
-            
+
             var asset = new ProGetAssetPusher(context.Log, config);
             return asset.DoesAssetExist(assetUri);
         }
@@ -74,7 +74,7 @@ namespace Cake.ProGet.Asset
         /// <returns>True if the asset is deleted, false otherwise.</returns>
         /// <exception cref="ArgumentNullException">Thrown if context or config is null.</exception>
         [CakeMethodAlias]
-        [CakeAliasCategory("ProGetAsset")]
+        [CakeAliasCategory("Asset")]
         public static bool ProGetDeleteAsset(this ICakeContext context, string assetUri, ProGetConfiguration config)
         {
             if (context == null)
@@ -86,7 +86,7 @@ namespace Cake.ProGet.Asset
             {
                 throw new ArgumentNullException(nameof(config));
             }
-            
+
             var asset = new ProGetAssetPusher(context.Log, config);
             return asset.DeleteAsset(assetUri);
         }
@@ -100,7 +100,7 @@ namespace Cake.ProGet.Asset
         /// <param name="config">The ProGet Configuration.</param>
         /// <exception cref="ArgumentNullException">Thrown if context or config is null.</exception>
         [CakeMethodAlias]
-        [CakeAliasCategory("ProGetAsset")]
+        [CakeAliasCategory("Asset")]
         public static void ProGetDownloadAsset(this ICakeContext context, string assetUri, FilePath outputPath,
             ProGetConfiguration config)
         {
@@ -113,11 +113,11 @@ namespace Cake.ProGet.Asset
             {
                 throw new ArgumentNullException(nameof(config));
             }
-            
+
             var asset = new ProGetAssetDownloader(config);
             asset.GetSingleAsset(assetUri, outputPath);
         }
-        
+
         /// <summary>
         /// Download an entire ProGet Asset Directory as a zip file.
         /// </summary>
@@ -127,7 +127,7 @@ namespace Cake.ProGet.Asset
         /// <param name="config">The ProGet Configuration.</param>
         /// <exception cref="ArgumentNullException">Thrown if context or config is null.</exception>
         [CakeMethodAlias]
-        [CakeAliasCategory("ProGetAsset")]
+        [CakeAliasCategory("Asset")]
         public static void ProGetDownloadAssetDirectory(this ICakeContext context, string assetDirectoryUri,
             FilePath outputPath, ProGetConfiguration config)
         {
@@ -140,7 +140,7 @@ namespace Cake.ProGet.Asset
             {
                 throw new ArgumentNullException(nameof(config));
             }
-            
+
             var asset = new ProGetAssetDownloader(config);
             asset.GetDirectoryOfAssets(assetDirectoryUri, outputPath);
         }
@@ -153,7 +153,7 @@ namespace Cake.ProGet.Asset
         /// <param name="config">The ProGetConfiguration.</param>
         /// <exception cref="ArgumentNullException">Thrown if context or config is null.</exception>
         [CakeMethodAlias]
-        [CakeAliasCategory("ProGetAsset")]
+        [CakeAliasCategory("Asset")]
         public static void ProGetCreateAssetDirectory(this ICakeContext context, string assetDirectoryUri,
             ProGetConfiguration config)
         {
@@ -166,7 +166,7 @@ namespace Cake.ProGet.Asset
             {
                 throw new ArgumentNullException(nameof(config));
             }
-            
+
             var asset = new ProGetAssetDirectoryLister(config);
             asset.CreateDirectory(assetDirectoryUri);
         }
@@ -180,7 +180,7 @@ namespace Cake.ProGet.Asset
         /// <returns>A list of <see cref="ProGetDirectoryListing"/> entries.</returns>
         /// <exception cref="ArgumentNullException">Thrown if context or config is null.</exception>
         [CakeMethodAlias]
-        [CakeAliasCategory("ProGetAsset")]
+        [CakeAliasCategory("Asset")]
         public static List<ProGetDirectoryListing> ProGetListAssetDirectory(this ICakeContext context, string assetDirectoryUri,
             ProGetConfiguration config)
         {
@@ -193,7 +193,7 @@ namespace Cake.ProGet.Asset
             {
                 throw new ArgumentNullException(nameof(config));
             }
-            
+
             var asset = new ProGetAssetDirectoryLister(config);
             return asset.ListDirectory(assetDirectoryUri);
         }
