@@ -11,7 +11,7 @@ namespace Cake.ProGet.Universal
     /// <summary>
     /// Contains functionality for working with <see href="https://inedo.com/support/documentation/proget/reference/universal-feed-api-and-package-format">UPack</see>
     /// </summary>
-    [CakeAliasCategory("UPack")]
+    [CakeAliasCategory("ProGet")]
     [CakeNamespaceImport("Cake.ProGet.Universal.Pack")]
     [CakeNamespaceImport("Cake.ProGet.Universal.Push")]
     [CakeNamespaceImport("Cake.ProGet.Universal.Install")]
@@ -25,7 +25,7 @@ namespace Cake.ProGet.Universal
         /// <param name="settings">The settings.</param>
         /// <exception cref="System.ArgumentNullException">Thrown if the context is null</exception>
         [CakeMethodAlias]
-        [CakeAliasCategory("Pack")]
+        [CakeAliasCategory("UPack")]
         public static void UPackPack(this ICakeContext context, UniversalPackagePackSettings settings)
         {
             if (context == null)
@@ -46,7 +46,7 @@ namespace Cake.ProGet.Universal
         /// <param name="settings">The settings</param>
         /// <exception cref="System.ArgumentNullException">Thrown if the context is null</exception>
         [CakeMethodAlias]
-        [CakeAliasCategory("Push")]
+        [CakeAliasCategory("UPack")]
         public static void UPackPush(this ICakeContext context, UniversalPackagePushSettings settings)
         {
             if (context == null)
@@ -67,7 +67,7 @@ namespace Cake.ProGet.Universal
         /// <param name="settings">The settings</param>
         /// <exception cref="System.ArgumentNullException">Thrown if the context is null</exception>
         [CakeMethodAlias]
-        [CakeAliasCategory("Unpack")]
+        [CakeAliasCategory("UPack")]
         public static void UPackUnpack(this ICakeContext context, UniversalPackageUnpackSettings settings)
         {
             if (context == null)
@@ -88,7 +88,7 @@ namespace Cake.ProGet.Universal
         /// <param name="settings">The settings</param>
         /// <exception cref="System.ArgumentNullException">Thrown if the context is null</exception>
         [CakeMethodAlias]
-        [CakeAliasCategory("Install")]
+        [CakeAliasCategory("UPack")]
         public static void UPackInstall(this ICakeContext context, UniversalPackageInstallSettings settings)
         {
             if (context == null)
