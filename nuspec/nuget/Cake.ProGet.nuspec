@@ -19,7 +19,11 @@
     <file src="net6.0\Cake.ProGet.dll" target="lib\net6.0" />
     <file src="net6.0\Cake.ProGet.pdb" target="lib\net6.0" />
     <file src="net6.0\Cake.ProGet.xml" target="lib\net6.0" />
-	<file src="..\..\..\upack.exe" target="tools" />
+	<file src="..\..\..\Upack\Inedo.UPack.dll" target="tools" />
+    <file src="..\..\..\Upack\upack.deps.json" target="tools" />
+    <file src="..\..\..\Upack\upack.dll" target="tools" />
+    <file src="..\..\..\Upack\upack.exe" target="tools" />
+    <file src="..\..\..\Upack\upack.runtimeconfig.json" target="tools" />
 	<file src="..\..\..\..\LICENSE" target="tools\LICENSE-UPACK" />
   </files>
 </package>
