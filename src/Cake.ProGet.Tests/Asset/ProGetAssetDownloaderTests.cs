@@ -1,7 +1,5 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Net;
-using System.Net.Http;
 using Cake.Core.IO;
 using Cake.ProGet.Asset;
 using WireMock.RequestBuilders;
@@ -29,7 +27,7 @@ namespace Cake.ProGet.Tests.Asset
         [InlineData("/endpoints/test/content/test.gif")]
         public void Should_Download_Asset(string assetUri)
         {
-            using(var server = FluentMockServer.Start())
+            using(var server = WireMockServer.Start())
             {
                 var tempFile = Path.GetTempFileName();
 
@@ -48,7 +46,7 @@ namespace Cake.ProGet.Tests.Asset
         [InlineData("/endpoints/test/content/test.gif")]
         public void Should_Throw_If_Asset_Not_Found(string assetUri)
         {
-            using(var server = FluentMockServer.Start())
+            using(var server = WireMockServer.Start())
             {
                 server.Given(Request.Create().WithPath(assetUri).UsingGet())
                 .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.NotFound));
@@ -63,7 +61,7 @@ namespace Cake.ProGet.Tests.Asset
         [InlineData("/endpoints/test/content/test.gif")]
         public void Should_Throw_If_Unauthorized(string assetUri)
         {
-            using(var server = FluentMockServer.Start())
+            using(var server = WireMockServer.Start())
             {
                 server.Given(Request.Create().WithPath(assetUri).UsingGet())
                 .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.Unauthorized));
