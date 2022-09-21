@@ -2,7 +2,7 @@
 
 `Cake.ProGet` is a [Cake](http://cakebuild.net) [add-in](http://cakebuild.net/docs/fundamentals/preprocessor-directives) that exposes [Inedo ProGet](https://inedo.com/proget) functionality to your build scripts.
 
- * Provides aliases for the functionality found in `upack.exe` ([available here](http://cdn.inedo.com/downloads/proget/upack1.0.0.zip)) .
+ * Provides aliases for the functionality found in `upack.exe` ([available here](https://github.com/Inedo/upack/releases/download/3.0.0/upack-net6.0.zip)) .
  * Provides aliases for the [Asset Directory](https://inedo.com/support/documentation/proget/core-concepts/asset-directories) functionality.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/2tst3twn2nu4qool?svg=true)](https://ci.appveyor.com/project/cakecontrib/cake-proget)
@@ -10,13 +10,16 @@
 
  ## Table of Contents
 
-1. [Building](#building)
-2. [Pre-Requisites](#pre-requisites)
-3. [Examples](#examples)
-    - [UPack](#universal-package)
+- [Cake.ProGet](#cakeproget)
+  - [Table of Contents](#table-of-contents)
+  - [Building](#building)
+  - [Pre-Requisites](#pre-requisites)
+  - [Examples](#examples)
+    - [Universal Package](#universal-package)
     - [ProGet Assets](#proget-assets)
-4. [Contributing](#contributing)
-5. [License](#license)
+  - [Contributing](#contributing)
+  - [License](#license)
+  - [Code of Conduct](#code-of-conduct)
 
 ## Building
 This package is built using [Cake.Recipe](https://github.com/cake-contrib/Cake.Recipe)
@@ -27,7 +30,7 @@ This package is built using [Cake.Recipe](https://github.com/cake-contrib/Cake.R
 ## Pre-Requisites
 
 The Cake.ProGet add-in is intended to be used in conjunction with your organization's ProGet asset repository.  The alias methods for the Universal Package functionality will require your build environment to have `upack.exe` available to it.
- 
+
  There are several ways you can configure your build environment for the `upack.exe`:
   - Add the installation path to your `%PATH%` variable.
   - Create environment variable(s) `%UPackInstall%` with the correct installation path set.
@@ -55,11 +58,11 @@ Task("Create-Package")
 Task("Publish-Package")
     .Description("Publishes a universal package")
     .IsDependentOn("Create-Package")
-    .Does(() => {                
+    .Does(() => {
         foreach(var item in GetFiles("./*.upack"))
         {
             UPackPush(new UniversalPackagePushSettings(item.FullPath, "http://your-proget-server/upack/packages/"));
-        }        
+        }
     });
 ```
 
