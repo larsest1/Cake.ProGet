@@ -31,7 +31,7 @@ namespace Cake.ProGet.Tests.Asset
         [InlineData("/endpoints/test/content/test.gif")]
         public void Should_Report_True_If_Asset_Exists(string assetUri)
         {
-            using(var server = FluentMockServer.Start())
+            using(var server = WireMockServer.Start())
             {
                 server.Given(Request.Create().WithPath(assetUri).UsingHead())
                 .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.OK));
@@ -46,7 +46,7 @@ namespace Cake.ProGet.Tests.Asset
         [InlineData("/endpoints/test/content/test.gif")]
         public void Should_Report_False_If_Asset_Does_Not_Exist(string assetUri)
         {
-            using(var server = FluentMockServer.Start())
+            using(var server = WireMockServer.Start())
             {
                 server.Given(Request.Create().WithPath(assetUri).UsingHead())
                 .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.NotFound));
@@ -61,7 +61,7 @@ namespace Cake.ProGet.Tests.Asset
         [InlineData("/endpoints/test/content/test.gif")]
         public void Should_Fail_Existence_Check_If_Creds_Are_Invalid(string assetUri)
         {
-            using(var server = FluentMockServer.Start())
+            using(var server = WireMockServer.Start())
             {
                 server.Given(Request.Create().WithPath(assetUri).UsingHead())
                 .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.Unauthorized));
@@ -76,7 +76,7 @@ namespace Cake.ProGet.Tests.Asset
         [InlineData("/endpoints/test/content/test.gif")]
         public void Should_Delete_Asset(string assetUri)
         {
-            using(var server = FluentMockServer.Start())
+            using(var server = WireMockServer.Start())
             {
                 server.Given(Request.Create().WithPath(assetUri).UsingDelete())
                 .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.OK));
@@ -91,7 +91,7 @@ namespace Cake.ProGet.Tests.Asset
         [InlineData("/endpoints/test/content/test.gif")]
         public void Should_Fail_Delete_If_Creds_Are_Invalid(string assetUri)
         {
-            using(var server = FluentMockServer.Start())
+            using(var server = WireMockServer.Start())
             {
                 server.Given(Request.Create().WithPath(assetUri).UsingDelete())
                 .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.Unauthorized));
@@ -106,7 +106,7 @@ namespace Cake.ProGet.Tests.Asset
         [InlineData("/endpoints/test/content/test.gif")]
         public void Should_Push_New_Asset_With_Put_Under_5MB(string assetUri)
         {
-            using(var server = FluentMockServer.Start())
+            using(var server = WireMockServer.Start())
             {
                 server.Given(Request.Create().WithPath(assetUri).UsingPut())
                 .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.OK));
@@ -133,7 +133,7 @@ namespace Cake.ProGet.Tests.Asset
         [InlineData("/endpoints/test/content/test.gif")]
         public void Should_Push_New_Asset_With_Multipart_Post_Over_5MB(string assetUri)
         {
-            using(var server = FluentMockServer.Start())
+            using(var server = WireMockServer.Start())
             {
                 server.Given(Request.Create().WithPath(assetUri).UsingPost())
                 .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.OK));
@@ -154,7 +154,7 @@ namespace Cake.ProGet.Tests.Asset
         [InlineData("/endpoints/test/content/test.gif")]
         public void Should_Throw_Exception_When_Asset_Push_Fails_As_Put(string assetUri)
         {
-            using(var server = FluentMockServer.Start())
+            using(var server = WireMockServer.Start())
             {
                 server.Given(Request.Create().WithPath(assetUri).UsingPut())
                 .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.BadRequest));

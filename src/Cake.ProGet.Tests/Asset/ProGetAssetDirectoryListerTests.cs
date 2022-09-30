@@ -42,7 +42,7 @@ namespace Cake.ProGet.Tests.Asset
             }
             ]";
 
-            using(var server = FluentMockServer.Start())
+            using(var server = WireMockServer.Start())
             {
                 server.Given(Request.Create().WithPath(assetDirectoryUri).UsingGet())
                 .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.OK).WithBody(jsonList));
@@ -65,7 +65,7 @@ namespace Cake.ProGet.Tests.Asset
             }
             ]";
 
-            using(var server = FluentMockServer.Start())
+            using(var server = WireMockServer.Start())
             {
                 server.Given(Request.Create().WithPath(assetDirectoryUri).UsingGet())
                 .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.OK).WithBody(jsonList));

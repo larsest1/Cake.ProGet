@@ -1,4 +1,4 @@
-#load nuget:?package=Cake.Recipe&version=1.0.0
+#load nuget:?package=Cake.Recipe&version=3.0.1
 
 Environment.SetVariableNames();
 
@@ -8,27 +8,23 @@ BuildParameters.SetParameters(context: Context,
                             title: "Cake.ProGet",
                             repositoryOwner: "cake-contrib",
                             repositoryName: "Cake.ProGet",
-                            shouldRunGitVersion: true);
+                            shouldCalculateVersion: true);
 
 ((CakeTask)BuildParameters.Tasks.UploadCoverallsReportTask.Task).Actions.Clear();
 
 BuildParameters.PrintParameters(Context);
 
-ToolSettings.SetToolSettings(context: Context,
-                            dupFinderExcludePattern: new string[] { BuildParameters.RootDirectoryPath + "/src/Cake.ProGet.Tests/*.cs", BuildParameters.RootDirectoryPath + "/src/Cake.ProGet/**/*.AssemblyInfo.cs" },
-                            testCoverageFilter: "+[*]* -[xunit.*]* -[Cake.Core]* -[Cake.Testing]* -[*.Tests]* -[FluentAssertions*]* ",
-                            testCoverageExcludeByAttribute: "*.ExcludeFromCodeCoverage*",
-                            testCoverageExcludeByFile: "*/*Designer.cs;*/*.g.cs;*/*.g.i.cs",
-                            dupFinderDiscardCost: 150,
-                            dupFinderThrowExceptionOnFindingDuplicates: false);
+ToolSettings.SetToolSettings(context: Context);
 
 BuildParameters.Tasks.CreateNuGetPackagesTask.IsDependentOn("Download-Upack");
 
 Task("Download-Upack")
-	.Does(() => {
-		DownloadFile(
-			"https://github.com/Inedo/upack/releases/download/upack-2.2.5.15/upack.exe",
-			BuildParameters.Paths.Directories.Build.GetFilePath("upack.exe"));
-	});
+    .Does(() => {
+        var upackZipFile = $"{BuildParameters.Paths.Directories.Build}/temp/upack-net6.0.zip";
+        var upackDirectory = $"{BuildParameters.Paths.Directories.Build}/Upack";
+
+        DownloadFile("https://github.com/Inedo/upack/releases/download/3.0.0/upack-net6.0.zip", upackZipFile);
+        Unzip(upackZipFile, upackDirectory);
+    });
 
 Build.RunDotNetCore();

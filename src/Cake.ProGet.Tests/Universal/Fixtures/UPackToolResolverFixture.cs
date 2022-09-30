@@ -18,7 +18,7 @@ namespace Cake.ProGet.Tests.Universal.Fixtures
             this.Tools = new ToolLocator(
                 this.Environment,
                 new ToolRepository(this.Environment),
-                new ToolResolutionStrategy(this.FileSystem, this.Environment, new Globber(this.FileSystem, this.Environment), new FakeConfiguration()));
+                new ToolResolutionStrategy(this.FileSystem, this.Environment, new Globber(this.FileSystem, this.Environment), new FakeConfiguration(), new FakeLog()));
         }
 
         public FilePath Resolve()
